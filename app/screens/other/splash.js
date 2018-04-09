@@ -17,7 +17,7 @@ import {
 import {NavigationActions} from 'react-navigation';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
 
-let timeFrame = 500;
+let timeFrame = 1000;
 
 export class SplashScreen extends React.Component {
 
@@ -26,12 +26,14 @@ export class SplashScreen extends React.Component {
     this.state = {
       progress: 0
     }
+
+    this.authstatus = this.authstatus.bind(this);
   }
 
   componentDidMount() {
     StatusBar.setHidden(true, 'none');
     RkTheme.setTheme(KittenTheme);
-
+    this.authstatus();
     this.timer = setInterval(() => {
       if (this.state.progress == 1) {
         clearInterval(this.timer);
@@ -55,16 +57,26 @@ export class SplashScreen extends React.Component {
 
   }
 
+  async authstatus(){
+    try {
+      const value = await AsyncStorage.getItem('@AuthStore:authStatus');
+      if (value !== null){
+        // We have data!!
+        console.log(value);
+        this.props.navigation.navigate('GridV1');
+      }
+    } catch (error) {
+      this.props.navigation.navigate('Login2');
+      // Error retrieving data
+    }
+  }
+
   render() {
     let width = Dimensions.get('window').width;
     return (
       <View style={styles.container}>
         <View>
           <Image style={[styles.image, {width}]} source={require('../../assets/images/splashBack.png')}/>
-          <View style={styles.text}>
-            <RkText rkType='light' style={styles.hero}>React Native</RkText>
-            <RkText rkType='logo' style={styles.appName}>UI Kitten</RkText>
-          </View>
         </View>
         <ProgressBar
           color={RkTheme.current.colors.accent}
@@ -83,7 +95,7 @@ let styles = StyleSheet.create({
   },
   image: {
     resizeMode: 'cover',
-    height: scaleVertical(430),
+    height: '100%',
   },
   text: {
     alignItems: 'center'
@@ -95,8 +107,10 @@ let styles = StyleSheet.create({
     fontSize: 62,
   },
   progress: {
+    position: 'absolute',
+    bottom: 35,
     alignSelf: 'center',
-    marginBottom: 35,
+    //marginBottom: 35,
     backgroundColor: '#e5e5e5'
   }
 });

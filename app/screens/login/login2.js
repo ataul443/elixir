@@ -1,4 +1,5 @@
 import React from 'react';
+import Expo from 'expo';
 import {
   View,
   Image,
@@ -12,8 +13,10 @@ import {
 } from 'react-native-ui-kitten';
 import {FontAwesome} from '../../assets/icons';
 import {GradientButton} from '../../components/gradientButton';
+import Loader from '../../components/loader';
 import {RkTheme} from 'react-native-ui-kitten';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
+
 
 export class LoginV2 extends React.Component {
   static navigationOptions = {
@@ -22,8 +25,47 @@ export class LoginV2 extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false
+    }
+
+    this.googleSignInAsync = this.googleSignInAsync.bind(this);
   }
 
+  googleSignInAsync(){
+    //this.setState({loading: true});
+    var _this = this;
+    async function signInWithGoogleAsync(_this) {
+    
+      try {
+        
+        const result = await Expo.Google.logInAsync({
+          androidClientId: '510839253130-aiamg0sjr39uj2b5f8fqla421qo98a3b.apps.googleusercontent.com',
+          iosClientId: '510839253130-ffmntg6nkr693hbcj7bmefobq01liesv.apps.googleusercontent.com',
+          scopes: ['profile', 'email'],
+        });
+  
+        if (result.type === 'success') {
+          console.log("result => ",result);
+          alert("Success!",result.user.photoUrl);
+          
+          _this.setState({loading: false});
+          _this.props.navigation.navigate('GridV1');
+          return result.accessToken;
+        } else {
+          _this.setState({loading: false});
+          return {cancelled: true};
+        }
+      } catch(e) {
+        _this.setState({loading: false});
+        alert(`Failed!\n${e}`);
+        return {error: true};
+      }
+    };
+    signInWithGoogleAsync(_this);
+  }
+
+  
   render() {
     let renderIcon = () => {
       if (RkTheme.current.name === 'light')
@@ -37,11 +79,13 @@ export class LoginV2 extends React.Component {
         onStartShouldSetResponder={ (e) => true}
         onResponderRelease={ (e) => Keyboard.dismiss()}>
         <View style={styles.header}>
+        
           {renderIcon()}
-          <RkText rkType='light h1'>React Native</RkText>
-          <RkText rkType='logo h0'>UI Kitten</RkText>
+          <RkText rkType='light h1'>Team Of Noobs</RkText>
+          <RkText rkType='logo h0'>Elixir</RkText>
         </View>
         <View style={styles.content}>
+        <Loader loading={this.state.loading} />
           <View>
             <RkTextInput rkType='rounded' placeholder='Username'/>
             <RkTextInput rkType='rounded' placeholder='Password' secureTextEntry={true}/>
@@ -54,7 +98,7 @@ export class LoginV2 extends React.Component {
               <RkText rkType='awesome hero'>{FontAwesome.twitter}</RkText>
             </RkButton>
             <RkButton style={styles.button} rkType='social'>
-              <RkText rkType='awesome hero'>{FontAwesome.google}</RkText>
+              <RkText onPress={this.googleSignInAsync} rkType='awesome hero'>{FontAwesome.google}</RkText>
             </RkButton>
             <RkButton style={styles.button} rkType='social'>
               <RkText rkType='awesome hero'>{FontAwesome.facebook}</RkText>
