@@ -31,16 +31,11 @@ export const MainRoutes = [
     ]
   },
   {
-    id: 'DashboardsMenu',
-    title: 'Dashboards',
+    id: 'Dashboard',
+    title: 'Dashboard',
     icon: FontIcons.dashboard,
-    screen: Screens.DashboardMenu,
-    children: [{
-      id: 'Dashboard',
-      title: 'Dashboard',
-      screen: Screens.Dashboard,
-      children: []
-    },]
+    screen: Screens.Dashboard,
+    children: []
   },
   {
     id: 'WalkthroughMenu',

@@ -89,7 +89,6 @@ export class LoginV2 extends React.Component {
         <View style={styles.header}>
         
           {renderIcon()}
-          <RkText rkType='light h1'>Team Of Noobs</RkText>
           <RkText rkType='logo h0'>Elixir</RkText>
         </View>
         <View style={styles.content}>
