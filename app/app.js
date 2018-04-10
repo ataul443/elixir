@@ -31,6 +31,9 @@ const KittenApp = StackNavigator({
   First: {
     screen: Screens.SplashScreen
   },
+  Auth:{
+    screen: Screens.LoginV2,
+  },
   Home: {
     screen: DrawerNavigator({
         ...AppRoutes,

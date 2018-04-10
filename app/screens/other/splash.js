@@ -4,7 +4,8 @@ import {
   Image,
   View,
   Dimensions,
-  StatusBar
+  StatusBar,
+  AsyncStorage
 } from 'react-native';
 import {
   RkText,
@@ -34,40 +35,52 @@ export class SplashScreen extends React.Component {
     StatusBar.setHidden(true, 'none');
     RkTheme.setTheme(KittenTheme);
     this.authstatus();
-    this.timer = setInterval(() => {
-      if (this.state.progress == 1) {
-        clearInterval(this.timer);
-        setTimeout(() => {
-          StatusBar.setHidden(false, 'slide');
-          let toHome = NavigationActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({routeName: 'Home'})]
-          });
-          this.props.navigation.dispatch(toHome)
-        }, timeFrame);
-      } else {
-        let random = Math.random() * 0.5;
-        let progress = this.state.progress + random;
-        if (progress > 1) {
-          progress = 1;
-        }
-        this.setState({progress});
-      }
-    }, timeFrame)
-
+    
   }
 
-  async authstatus(){
+    async authstatus(){
+      let nextScreen = 'Home';
+      console.log("Started");
     try {
-      const user = AsyncStorage.getItem('@AuthStore:user');
-      if (user !== null){
-        // We have data!!
-        console.log(value);
-        this.props.navigation.navigate('GridV1');
+      
+      const user = await AsyncStorage.getItem('@AuthStore:user')
+
+      if(user !== null){
+        
+        console.log("User Found");
+        return;
+      }else{
+        nextScreen = 'Auth';
+        console.log("User Not FOund!");
+        
       }
+
     } catch (error) {
-      this.props.navigation.navigate('Login2');
+      console.log(error)
+      nextScreen = 'Auth'
       // Error retrieving data
+    } finally{
+      this.timer = setInterval(() => {
+        if (this.state.progress == 1) {
+          clearInterval(this.timer);
+          setTimeout(() => {
+            StatusBar.setHidden(false, 'slide');
+            let toHome = NavigationActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({routeName: nextScreen})]
+            });
+            this.props.navigation.dispatch(toHome)
+          }, timeFrame);
+        } else {
+          let random = Math.random() * 0.5;
+          let progress = this.state.progress + random;
+          if (progress > 1) {
+            progress = 1;
+          }
+          this.setState({progress});
+        }
+      }, timeFrame)
+  
     }
   }
 

@@ -5,7 +5,8 @@ import {
   ScrollView,
   Image,
   Platform,
-  StyleSheet
+  StyleSheet,
+  AsyncStorage
 } from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import {
@@ -20,7 +21,15 @@ export class SideMenu extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      profileIcon : null
+    }
+    
     this._navigateAction = this._navigate.bind(this);
+  }
+
+  componentDidMount(){
+    this._loadProfileIcon();
   }
 
   _navigate(route) {
@@ -33,11 +42,26 @@ export class SideMenu extends React.Component {
     this.props.navigation.dispatch(resetAction)
   }
 
+  async _loadProfileIcon(){
+    const user = await AsyncStorage.getItem('@AuthStore:user');
+    user1 = JSON.parse(user);
+    let url = user1.photoUrl;
+    this.setState({profileIcon: url})
+    console.log(url);
+    return url;
+  }
+
   _renderIcon() {
+    if(this.state.profileIcon){
+      if (RkTheme.current.name === 'light')
+      return <Image style={styles.icon} source={{uri: this.state.profileIcon}}/>;
+    return <Image style={styles.icon} source={{uri: this.state.profileIcon}}/>
+    }else{
+
     if (RkTheme.current.name === 'light')
       return <Image style={styles.icon} source={require('../../assets/images/smallLogo.png')}/>;
     return <Image style={styles.icon} source={require('../../assets/images/smallLogoDark.png')}/>
-
+    }
   }
 
   render() {
@@ -94,5 +118,8 @@ let styles = RkStyleSheet.create(theme => ({
   },
   icon: {
     marginRight: 13,
+    width: 50,
+    height: 50,
+    borderRadius: 50
   }
 }));

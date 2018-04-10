@@ -3,7 +3,8 @@ import Expo from 'expo';
 import {
   View,
   Image,
-  Keyboard
+  Keyboard,
+  AsyncStorage
 } from 'react-native';
 import {
   RkButton,
@@ -16,6 +17,7 @@ import {GradientButton} from '../../components/gradientButton';
 import Loader from '../../components/loader';
 import {RkTheme} from 'react-native-ui-kitten';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
+import {NavigationActions} from 'react-navigation';
 
 
 export class LoginV2 extends React.Component {
@@ -29,46 +31,48 @@ export class LoginV2 extends React.Component {
       loading: false
     }
 
-    this.googleSignInAsync = this.googleSignInAsync.bind(this);
+    this.signInWithGoogleAsync = this.signInWithGoogleAsync.bind(this);
   }
-
-  googleSignInAsync(){
-    //this.setState({loading: true});
-    var _this = this;
-    async function signInWithGoogleAsync(_this) {
     
-    async signInWithGoogleAsync() {
-      console.log("I am running");
-      //AsyncStorage.setItem('@AuthStore:user',JSON.stringify({user: "ataul"}));
-      //console.log('Inserted User');
-      try {
-        
-        const result = await Expo.Google.logInAsync({
-          androidClientId: '510839253130-aiamg0sjr39uj2b5f8fqla421qo98a3b.apps.googleusercontent.com',
-          iosClientId: '510839253130-ffmntg6nkr693hbcj7bmefobq01liesv.apps.googleusercontent.com',
-          scopes: ['profile', 'email'],
-        })
-  
-        if (result.type === 'success') {
-          console.log("result => ",result);
-          alert("Success!",result.user.photoUrl);
-          
-          _this.setState({loading: false});
-          _this.props.navigation.navigate('GridV1');
-          return result.accessToken;
-        } else {
-          _this.setState({loading: false});
-          return {cancelled: true};
-        }
-      } catch(e) {
-        _this.setState({loading: false});
-        alert(`Failed!\n${e}`);
-        return {error: true};
+  async signInWithGoogleAsync() {
+    console.log("I am running");
+    this.setState({loading: true})
+    //AsyncStorage.setItem('@AuthStore:user',JSON.stringify({user: "ataul"}));
+    //console.log('Inserted User');
+    try {
+      
+      const result = await Expo.Google.logInAsync({
+        androidClientId: '510839253130-aiamg0sjr39uj2b5f8fqla421qo98a3b.apps.googleusercontent.com',
+        iosClientId: '510839253130-ffmntg6nkr693hbcj7bmefobq01liesv.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      })
+
+      if (result.type === 'success') {
+        console.log("result => ",result);
+        console.log(result.user)
+        await AsyncStorage.setItem('@AuthStore:user',JSON.stringify(result.user));
+        this.setState({loading: false});
+        this._resetNavigationStateToHome();
+        return result.accessToken;
+      } else {
+        this.setState({loading: false});
+        return {cancelled: true};
       }
-    };
-    signInWithGoogleAsync(_this);
+    } catch(e) {
+      this.setState({loading: false});
+      alert(`Failed!\n${e}`);
+      return {error: true};
+    }
   }
 
+ 
+  _resetNavigationStateToHome(){
+    let toHome = NavigationActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({routeName: 'Home'})]
+    });
+    this.props.navigation.dispatch(toHome)
+  }
   
   render() {
     let renderIcon = () => {
@@ -102,7 +106,9 @@ export class LoginV2 extends React.Component {
               <RkText rkType='awesome hero'>{FontAwesome.twitter}</RkText>
             </RkButton>
             <RkButton style={styles.button} rkType='social'>
-              <RkText onPress={this.googleSignInAsync} rkType='awesome hero'>{FontAwesome.google}</RkText>
+              <RkText onPress={()=>{
+                this.signInWithGoogleAsync();
+              }} rkType='awesome hero'>{FontAwesome.google}</RkText>
             </RkButton>
             <RkButton style={styles.button} rkType='social'>
               <RkText rkType='awesome hero'>{FontAwesome.facebook}</RkText>

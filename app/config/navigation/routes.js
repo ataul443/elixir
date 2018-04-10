@@ -58,11 +58,11 @@ export const MainRoutes = [
 
 let menuRoutes = _.cloneDeep(MainRoutes);
 menuRoutes.unshift({
-  /*
+  
   id: 'GridV1',
   title: 'Home',
   screen: Screens.GridV1,
-  */
+  
  /*
  id: 'Login2',
         title: 'Login V2',
