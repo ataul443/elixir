@@ -59,8 +59,8 @@ export class SplashScreen extends React.Component {
 
   async authstatus(){
     try {
-      const value = await AsyncStorage.getItem('@AuthStore:authStatus');
-      if (value !== null){
+      const user = AsyncStorage.getItem('@AuthStore:user');
+      if (user !== null){
         // We have data!!
         console.log(value);
         this.props.navigation.navigate('GridV1');

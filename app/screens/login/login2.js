@@ -37,13 +37,17 @@ export class LoginV2 extends React.Component {
     var _this = this;
     async function signInWithGoogleAsync(_this) {
     
+    async signInWithGoogleAsync() {
+      console.log("I am running");
+      //AsyncStorage.setItem('@AuthStore:user',JSON.stringify({user: "ataul"}));
+      //console.log('Inserted User');
       try {
         
         const result = await Expo.Google.logInAsync({
           androidClientId: '510839253130-aiamg0sjr39uj2b5f8fqla421qo98a3b.apps.googleusercontent.com',
           iosClientId: '510839253130-ffmntg6nkr693hbcj7bmefobq01liesv.apps.googleusercontent.com',
           scopes: ['profile', 'email'],
-        });
+        })
   
         if (result.type === 'success') {
           console.log("result => ",result);
