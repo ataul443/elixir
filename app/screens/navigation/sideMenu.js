@@ -22,7 +22,8 @@ export class SideMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profileIcon : null
+      profileIcon : null,
+      user: null
     }
     
     this._navigateAction = this._navigate.bind(this);
@@ -45,9 +46,10 @@ export class SideMenu extends React.Component {
   async _loadProfileIcon(){
     const user = await AsyncStorage.getItem('@AuthStore:user');
     user1 = JSON.parse(user);
+    this.setState({user: user1});
     let url = user1.photoUrl;
     this.setState({profileIcon: url})
-    console.log(url);
+    console.log(this.state.user);
     return url;
   }
 
@@ -59,7 +61,7 @@ export class SideMenu extends React.Component {
     }else{
 
     if (RkTheme.current.name === 'light')
-      return <Image style={styles.icon} source={require('../../assets/images/smallLogo.png')}/>;
+      return <Image style={styles.icon} source={require('../../assets/images/logo.png')}/>;
     return <Image style={styles.icon} source={require('../../assets/images/smallLogoDark.png')}/>
     }
   }
@@ -85,13 +87,18 @@ export class SideMenu extends React.Component {
       )
     });
 
+    let name = null;
+    if(this.state.user) name = this.state.user.name;
+    else name = 'Elixer';
+    
     return (
       <View style={styles.root}>
         <ScrollView
           showsVerticalScrollIndicator={false}>
           <View style={[styles.container, styles.content]}>
             {this._renderIcon()}
-            <RkText rkType='logo'>UI Kitten</RkText>
+            <RkText rkType='logo'>{name}</RkText>
+            
           </View>
           {menu}
         </ScrollView>
