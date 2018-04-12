@@ -1,23 +1,19 @@
-import React from 'react';
-import _ from 'lodash';
-import {StackNavigator} from 'react-navigation'
-import {withRkTheme} from 'react-native-ui-kitten'
-import {NavBar} from '../../components/index';
-import transition from './transitions';
-import {
-  MainRoutes,
-  MenuRoutes
-} from './routes';
+import React from "react";
+import _ from "lodash";
+import { StackNavigator } from "react-navigation";
+import { withRkTheme } from "react-native-ui-kitten";
+import { NavBar } from "../../components/index";
+import transition from "./transitions";
+import { MainRoutes, MenuRoutes } from "./routes";
 
 let main = {};
 let flatRoutes = {};
-(MenuRoutes).map(function (route, index) {
-
-  let wrapToRoute = (route) => {
+MenuRoutes.map(function(route, index) {
+  let wrapToRoute = route => {
     return {
       screen: withRkTheme(route.screen),
       title: route.title
-    }
+    };
   };
 
   flatRoutes[route.id] = wrapToRoute(route);
@@ -35,13 +31,18 @@ const DrawerRoutes = Object.keys(main).reduce((routes, name) => {
     name: stack_name,
     screen: StackNavigator(flatRoutes, {
       initialRouteName: name,
-      headerMode: 'screen',
-      cardStyle: {backgroundColor: 'transparent'},
+      headerMode: "screen",
+      cardStyle: { backgroundColor: "transparent" },
       transitionConfig: transition,
-      navigationOptions: ({navigation, screenProps}) => ({
+      navigationOptions: ({ navigation, screenProps }) => ({
         gesturesEnabled: false,
-        header: (headerProps) => {
-          return <ThemedNavigationBar navigation={navigation} headerProps={headerProps}/>
+        header: headerProps => {
+          return (
+            <ThemedNavigationBar
+              navigation={navigation}
+              headerProps={headerProps}
+            />
+          );
         }
       })
     })
@@ -50,6 +51,8 @@ const DrawerRoutes = Object.keys(main).reduce((routes, name) => {
 }, {});
 
 export const AppRoutes = DrawerRoutes;
-export const MessagingRoutes = _.find(MainRoutes, {id: 'MessagingMenu'}).children;
-export const DashboardRoutes = _.find(MainRoutes, {id: 'DashboardsMenu'}).children;
-export const WalkthroughRoutes = _.find(MainRoutes, {id: 'WalkthroughMenu'}).children;
+export const MessagingRoutes = _.find(MainRoutes, { id: "MessagingMenu" })
+  .children;
+export const DashboardRoutes = _.find(MainRoutes, { id: "Dashboard" }).children;
+export const ScannerRoutes = _.find(MainRoutes, { id: "Scanner" }).children;
+export const EditorRoutes = _.find(MainRoutes, { id: "CodeEditor" }).children;

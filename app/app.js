@@ -1,16 +1,15 @@
-import React from 'react';
-import {
-  DrawerNavigator,
-  StackNavigator
-} from 'react-navigation';
-import {withRkTheme} from 'react-native-ui-kitten';
-import {AppRoutes} from './config/navigation/routesBuilder';
-import * as Screens from './screens';
-import {bootstrap} from './config/bootstrap';
-import track from './config/analytics';
-import {data} from './data'
-import {AppLoading, Font} from 'expo';
-import {View} from "react-native";
+import React from "react";
+import { DrawerNavigator, StackNavigator } from "react-navigation";
+import { withRkTheme } from "react-native-ui-kitten";
+import { AppRoutes } from "./config/navigation/routesBuilder";
+import * as Screens from "./screens";
+import { bootstrap } from "./config/bootstrap";
+import track from "./config/analytics";
+import { data } from "./data";
+import { AppLoading, Font } from "expo";
+import { View } from "react-native";
+import IOSCreen from "./screens/editor/io";
+import OutputScreen from "./screens/editor/output";
 
 bootstrap();
 data.populateData();
@@ -25,29 +24,47 @@ function getCurrentRouteName(navigationState) {
   }
   return route.routeName;
 }
-
+const IONavigator = StackNavigator({
+  IOScreen: {
+    screen: IOSCreen
+  },
+  Output: {
+    screen: OutputScreen
+  }
+});
 let SideMenu = withRkTheme(Screens.SideMenu);
-const KittenApp = StackNavigator({
+const KittenApp = StackNavigator(
+  {
+    Home: {
+      screen: DrawerNavigator(
+        {
+          ...AppRoutes
+        },
+        {
+          drawerOpenRoute: "DrawerOpen",
+          drawerCloseRoute: "DrawerClose",
+          drawerToggleRoute: "DrawerToggle",
+          contentComponent: props => <SideMenu {...props} parentProps={props} />
+        }
+      )
+    },
+    IO: {
+      screen: IONavigator
+    }
+  },
+
+  {
+    headerMode: "none"
+  }
+);
+/*
   First: {
     screen: Screens.SplashScreen
   },
   Auth:{
     screen: Screens.LoginV2,
   },
-  Home: {
-    screen: DrawerNavigator({
-        ...AppRoutes,
-      },
-      {
-        drawerOpenRoute: 'DrawerOpen',
-        drawerCloseRoute: 'DrawerClose',
-        drawerToggleRoute: 'DrawerToggle',
-        contentComponent: (props) => <SideMenu {...props} parentProps={props}/>
-      })
-  }
-}, {
-  headerMode: 'none',
-});
+  */
 
 export default class App extends React.Component {
   state = {
@@ -58,17 +75,17 @@ export default class App extends React.Component {
     this._loadAssets();
   }
 
-  _loadAssets = async() => {
+  _loadAssets = async () => {
     await Font.loadAsync({
-      'fontawesome': require('./assets/fonts/fontawesome.ttf'),
-      'icomoon': require('./assets/fonts/icomoon.ttf'),
-      'Righteous-Regular': require('./assets/fonts/Righteous-Regular.ttf'),
-      'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
-      'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-      'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-      'Roboto-Light': require('./assets/fonts/Roboto-Light.ttf'),
+      fontawesome: require("./assets/fonts/fontawesome.ttf"),
+      icomoon: require("./assets/fonts/icomoon.ttf"),
+      "Righteous-Regular": require("./assets/fonts/Righteous-Regular.ttf"),
+      "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+      "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+      "Roboto-Light": require("./assets/fonts/Roboto-Light.ttf")
     });
-    this.setState({loaded: true});
+    this.setState({ loaded: true });
   };
 
   render() {
@@ -77,7 +94,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <KittenApp
           onNavigationStateChange={(prevState, currentState) => {
             const currentScreen = getCurrentRouteName(currentState);
