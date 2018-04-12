@@ -23,35 +23,38 @@ export class Scanner extends React.Component {
 
   constructor(props) {
     super(props);
+    this.pickerChoice = false;
     this.state = {
       image: null,
       uploadImage: null,
       textCode: null,
       modalVisible: false,
       uploadStatus: "Loading...",
-      modalContent: "imageCrop",
+      modalContent: "picker",
       modalClick: false,
-      cropChoice: false
     };
   }
 
   componentWillUnmount() {
-    this.setState({
-      image: null,
-      uploadImage: null,
-      textCode: null,
-      modalVisible: false,
-      uploadStatus: "Loading...",
-      modalContent: "imageCrop",
-      modalClick: false,
-      cropChoice: false
-    });
+    this.onResetModal();
   }
 
   //Modal Section
   openModal = () => {
     this.setState({ modalVisible: true });
   };
+
+  onResetModal = ()=>{
+    this.setState({
+      image: null,
+      uploadImage: null,
+      textCode: null,
+      modalVisible: false,
+      uploadStatus: "Loading...",
+      modalContent: "picker",
+      modalClick: false,
+    });
+  }
 
   onModalHidden = () => {
     /*
@@ -80,9 +83,13 @@ export class Scanner extends React.Component {
     this.setState({ modalVisible: false });
   };
 
-  _pickImage = async crop => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      base64: true,
+  _pickImage = async (crop,picker) => {
+    this.closeModal();
+    let imagePicker = null;
+    if(picker == 'Camera') imagePicker = ImagePicker.launchCameraAsync;
+    else imagePicker = ImagePicker.launchImageLibraryAsync;
+    let result = await imagePicker({
+      base64: crop,
       allowsEditing: crop,
       aspect: [4, 3]
     });
@@ -96,7 +103,7 @@ export class Scanner extends React.Component {
       return;
     } else {
       //console.log(result,"full size base64");
-      this.closeModal();
+      
       this.setState({ image: result, modalContent: "imageFilter" });
       this.openModal();
     }
@@ -183,7 +190,7 @@ export class Scanner extends React.Component {
         let responseObj = JSON.parse(res._bodyText);
         let textString = responseObj.text;
         console.log(textString, "text String");
-        this.closeModal();
+        this.onResetModal();
 
         this.props.navigation.navigate("CodeEditor", {
           textCode: textString
@@ -218,6 +225,40 @@ export class Scanner extends React.Component {
       "image data\n",
       this.state.uploadImage,
       "uploade image"
+    );
+    const imageP = (
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+      >
+        <Button
+          title="Open Camera"
+          buttonStyle={{ backgroundColor: "transparent" }}
+          containerViewStyle={{ width: "100%" }}
+          textStyle={{ color: "black" }}
+          fontSize={22}
+          onPress={() => {
+            this.pickerChoice = 'Camera';
+            this.setState({modalContent: 'imageCrop'});
+          }}
+        />
+
+        <Button
+          title="Open Gallery"
+          buttonStyle={{ backgroundColor: "transparent" }}
+          containerViewStyle={{ width: "100%" }}
+          textStyle={{ color: "black" }}
+          fontSize={22}
+          onPress={() => {
+            this.pickerChoice = 'ImageLibrary';
+            this.setState({modalContent: 'imageCrop'});
+          }}
+        />
+      </View>
     );
 
     const imageFilter = (
@@ -274,7 +315,7 @@ export class Scanner extends React.Component {
           textStyle={{ color: "black" }}
           fontSize={18}
           onPress={() => {
-            this._pickImage(true);
+            this._pickImage(true,this.pickerChoice);
           }}
         />
         <Button
@@ -307,8 +348,8 @@ export class Scanner extends React.Component {
 
     let contentModal = null;
     switch (this.state.modalContent) {
-      case "picker":
-        contentModal = imageP;
+      case "imageCrop":
+        contentModal = imageCrop;
         break;
       case "loader":
         contentModal = loader;
@@ -317,7 +358,7 @@ export class Scanner extends React.Component {
         contentModal = imageFilter;
         break;
       default:
-        contentModal = imageCrop;
+        contentModal = imageP;
         break;
     }
 
@@ -326,7 +367,7 @@ export class Scanner extends React.Component {
         <Modal
           isVisible={this.state.modalVisible}
           onBackButtonPress={() => {
-            this.closeModal();
+            this.onResetModal();
           }}
           onModalHide={() => {
             this.onModalHidden();
@@ -336,13 +377,13 @@ export class Scanner extends React.Component {
             <View style={styles.modalInnerContainer}>{contentModal}</View>
           </View>
         </Modal>
-        <ScrollView>
-          {this.state.image ? this.renderAsset(this.state.image) : null}
-        </ScrollView>
+        <View style={{ flex: 1,alignItems:'center',justifyContent:'center'}}>
         <Text>Welcome</Text>
         <Text>Please Capture an Image.</Text>
         <Text>Or</Text>
         <Text>Select one from gallery.</Text>
+        </View>
+        
 
         {/*
             onPress={() => {
@@ -354,19 +395,22 @@ export class Scanner extends React.Component {
         <Button
           small
           raised
+          
           buttonStyle={{
-            borderRadius: 20,
-
-            borderColor: "#EA4265",
-            borderWidth: 1
+            borderRadius: 30,
+            backgroundColor: "#EA4265",
+            height: scaleVertical(44),
           }}
           containerViewStyle={{
-            borderRadius: 20,
+            borderRadius: 30,
             width: scale(120),
-            marginBottom: scaleVertical(60)
+            marginBottom: scaleVertical(60),
+            height: scaleVertical(44),
           }}
           backgroundColor="#EA4265"
           title="Scan Image"
+          underlayColor = "transparent"
+          textStyle={{  fontSize: 16  }}
           onPress={() => {
             this.openModal();
             //this.props.navigation.navigate('IO');
