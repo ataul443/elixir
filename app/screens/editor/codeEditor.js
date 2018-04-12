@@ -264,7 +264,7 @@ export class CodeEditor extends React.Component {
           </View>
         </Modal>
         <WebView
-          style={{ width: this.state.webWidth, backgroundColor: "#141414" }}
+          style={{ width: this.state.webWidth }}
           source={require("../../assets/editor/editor.html")}
           ref="editorWebView"
           //ref={ref => {

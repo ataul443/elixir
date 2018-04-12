@@ -16,10 +16,33 @@ export class DoughnutChart extends RkComponent {
   constructor(props) {
     super(props);
     let status = this.props.status;
+    let colors = null;
     let statusCode = "CE";
-    if ((status = "AC")) {
-      statusCode = "OK";
-      status = "ACCEPTED ANSWER";
+    switch(status){
+      case 'CE':
+      status = 'Compilation Errors';
+      colors = RkTheme.current.colors.charts.doughnut[3];
+      break;
+
+      case 'AC':
+      statusCode = 'AC'
+      status = 'Accepted Answer';
+      colors = RkTheme.current.colors.charts.doughnut[0];
+      break;
+
+      case 'TLE':
+      statusCode = 'TLE'
+      status = 'Accepted Answer';
+      colors = RkTheme.current.colors.charts.doughnut[1];
+      break;
+
+      case 'WA':
+      statusCode = 'TLE'
+      status = 'Wrong Answer';
+      colors = RkTheme.current.colors.charts.doughnut[2];
+      break;
+      
+      
     }
     this.size = 300;
     this.fontSize = 40;
@@ -32,7 +55,7 @@ export class DoughnutChart extends RkComponent {
           y: 240,
           title: "24%",
           name: status,
-          color: RkTheme.current.colors.charts.doughnut[0]
+          color: colors,
         }
         /** 
         {

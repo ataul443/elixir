@@ -13,6 +13,7 @@ import { RkCard, RkText, RkStyleSheet, RkButton } from "react-native-ui-kitten";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 let moment = require("moment");
+import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
 
 export class Scanner extends React.Component {
   static navigationOptions = {
@@ -32,6 +33,19 @@ export class Scanner extends React.Component {
       modalClick: false,
       cropChoice: false
     };
+  }
+
+  componentWillUnmount() {
+    this.setState({
+      image: null,
+      uploadImage: null,
+      textCode: null,
+      modalVisible: false,
+      uploadStatus: "Loading...",
+      modalContent: "imageCrop",
+      modalClick: false,
+      cropChoice: false
+    });
   }
 
   //Modal Section
@@ -168,12 +182,11 @@ export class Scanner extends React.Component {
       .then(res => {
         let responseObj = JSON.parse(res._bodyText);
         let textString = responseObj.text;
-        this.setState({ textCode: res._bodyText, modalClick: true });
         console.log(textString, "text String");
         this.closeModal();
 
         this.props.navigation.navigate("CodeEditor", {
-          textCode: this.state.textCode
+          textCode: textString
         });
       })
       .catch(error => {
@@ -338,25 +351,27 @@ export class Scanner extends React.Component {
             });
           }}
             */}
+        <Button
+          small
+          raised
+          buttonStyle={{
+            borderRadius: 20,
 
-        <RkButton
-          rkType="primary"
-          style={{
-            borderRadius: 50,
-            width: 90,
-            height: 90,
-            marginBottom: 60
+            borderColor: "#EA4265",
+            borderWidth: 1
           }}
+          containerViewStyle={{
+            borderRadius: 20,
+            width: scale(120),
+            marginBottom: scaleVertical(60)
+          }}
+          backgroundColor="#EA4265"
+          title="Scan Image"
           onPress={() => {
             this.openModal();
             //this.props.navigation.navigate('IO');
           }}
-        >
-          <Image
-            style={{ width: 60, height: 60 }}
-            source={require("../../assets/images/scan.png")}
-          />
-        </RkButton>
+        />
       </View>
     );
     /*

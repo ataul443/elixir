@@ -45,7 +45,7 @@ export default class IO extends React.Component {
 
        alert("No COde Found");
     }else{
-      alert(codeText);
+      //alert(codeText);
     }
     
     this.state = {
