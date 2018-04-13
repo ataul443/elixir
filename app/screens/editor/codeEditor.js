@@ -9,6 +9,8 @@ import {
   Picker,
   TextInput
 } from "react-native";
+import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
+
 import ActionButton from "react-native-action-button";
 import { Ionicons } from "@expo/vector-icons";
 import { Button } from "react-native-elements";
@@ -28,26 +30,29 @@ export class CodeEditor extends React.Component {
   constructor(props) {
     super(props);
     this.onMessage = this.onMessage.bind(this);
-    let inputText = props.navigation.state.params.textCode;
+    let inputText = null;
+    if(props.navigation.state.params) inputText = props.navigation.state.params.textCode;
     console.log(inputText);
     if (!inputText || inputText.length == 0)
       inputText = "//! NO Code Found !\n\n";
     this.state = {
       webWidth: deviceWidth,
       inputData: inputText,
-      uploadStatus: "Executing Code...",
+      uploadStatus: "Loading...",
       modalVisible: false,
       language: "Select",
-      modalContent: "picker",
-      userInput: "0",
-      outputResp: "",
+      modalContent: "loader",
       fab: false
     };
   }
   onMessage(event) {
-    this.setState({ inputData: event.nativeEvent.data });
+    if(event.nativeEvent.data == 'INSERTED'){
+      this.setState({modalVisible: false,fab: true})
+    }else{
+    this.setState({modalVisible: false});
     console.log("message", event.nativeEvent.data);
     this.props.navigation.navigate("IO", { code: this.state.inputData });
+    }
   }
 
   onModalOpen = () => {
@@ -67,6 +72,7 @@ export class CodeEditor extends React.Component {
   };
 
   componentDidMount() {
+    this.onModalOpen();
     let inputText = this.state.inputData;
     console.log(inputText, "Inserting Code Man");
     //this.webview.injectJavaScript(`editor.insert("${inputText}");`);
@@ -111,44 +117,6 @@ export class CodeEditor extends React.Component {
   };
 
   render() {
-    const picker = (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <Text
-          style={{
-            textAlignVertical: "center",
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: 16
-          }}
-        >
-          Select Language{" "}
-        </Text>
-        <Picker
-          style={{ width: 100 }}
-          selectedValue={this.state.language}
-          onValueChange={(itemValue, itemIndex) => {
-            if (itemValue != "false") {
-              this.setState({ language: itemValue, modalContent: "input" });
-            }
-          }}
-        >
-          <Picker.Item label="Select" value="false" />
-          <Picker.Item label="C++" value="C++" />
-          <Picker.Item label="C" value="C" />
-
-          <Picker.Item label="Java" value="Java" />
-          <Picker.Item label="JavaScript" value="Js" />
-          <Picker.Item label="Python" value="Python" />
-        </Picker>
-      </View>
-    );
 
     const loader = (
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
@@ -165,70 +133,10 @@ export class CodeEditor extends React.Component {
       </View>
     );
 
-    const userInput = (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <Text
-            style={{
-              textAlignVertical: "center",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: 16
-            }}
-          >
-            User Input{" "}
-          </Text>
-          <TextInput
-            onChangeText={changeText => {
-              this.setState({ userInput: changeText });
-            }}
-            value={this.state.userInput}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
-          <Button
-            title="Run Code"
-            fontWeight="bold"
-            buttonStyle={styles.button}
-            raised
-            containerViewStyle={{ borderRadius: 4 }}
-            onPress={() => {
-              this.runCode();
-            }}
-          />
-        </View>
-      </View>
-    );
-
-    let content = picker;
-    if (this.state.modalContent == "input") {
-      content = userInput;
-    } else if (this.state.modalContent == "loader") {
-      content = loader;
-    }
+    let content = loader;
 
     let fab = (
+      /*
       <ActionButton
         buttonColor="rgb(66, 194, 244)"
         nativeFeedbackRippleColor="rgba(255,255,255,0.75)"
@@ -238,7 +146,34 @@ export class CodeEditor extends React.Component {
         onPress={() => {
           this.refs.editorWebView.postMessage("collect");
         }}
-      />
+      />*/
+      <Button
+          small
+          raised
+          buttonStyle={{
+            borderRadius: 30,
+            backgroundColor: "#EA4265",
+            width: 60,
+            height: 60
+          }}
+          containerViewStyle={{
+            position:'absolute',
+            borderRadius: 30,
+            width: 60,
+            right: scale(30),
+            bottom: scaleVertical(60),
+            height:60,
+          }}
+          backgroundColor="#EA4265"
+          title="Run"
+          underlayColor = "transparent"
+          textStyle={{  fontSize: 16  }}
+          onPress={() => {
+            this.onModalOpen();
+            this.refs.editorWebView.postMessage("collect");
+            //this.props.navigation.navigate('IO');
+          }}
+        />
     );
 
     let fabButton = this.state.fab ? fab : false;
@@ -315,8 +250,8 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: "center"
   },
   modalInnerContainer: {
-    width: "80%",
-    height: "25%",
+    width: "60%",
+    height: "15%",
     backgroundColor: "#fff",
     borderRadius: 10
   },

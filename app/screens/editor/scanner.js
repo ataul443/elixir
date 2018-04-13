@@ -190,6 +190,7 @@ export class Scanner extends React.Component {
         let responseObj = JSON.parse(res._bodyText);
         let textString = responseObj.text;
         console.log(textString, "text String");
+        this.closeModal();
         this.onResetModal();
 
         this.props.navigation.navigate("CodeEditor", {

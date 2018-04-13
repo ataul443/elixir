@@ -8,11 +8,11 @@ import {
   ActivityIndicator,
   ScrollView
 } from "react-native";
-import { StackNavigator } from "react-navigation";
+import { StackNavigator, NavigationActions } from "react-navigation";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { RkStyleSheet, RkPicker } from "react-native-ui-kitten";
-import { Button } from "react-native-elements";
+import { Button, Card, } from "react-native-elements";
 import ActionButton from "react-native-action-button";
 
 let moment = require("moment");
@@ -30,7 +30,13 @@ export default class IO extends React.Component {
           size={32}
           colors="black"
           onPress={navigation => {
-            navigation.goBack();
+            let resetAction = NavigationActions.reset({
+              index: 0,
+              actions: [
+                NavigationActions.navigate({routeName: 'GridV1'})
+              ]
+            });
+            this.props.navigation.dispatch(resetAction)
           }}
         />
       )
@@ -183,6 +189,7 @@ export default class IO extends React.Component {
 
     return (
       <View style={styles.container}>
+      {/** 
         <View style={{ flex: 1, flexDirection: "column" }}>
           <Text
             style={{
@@ -219,6 +226,7 @@ export default class IO extends React.Component {
             />
           </View>
         </View>
+        */}
 
         <Modal
           isVisible={this.state.modalVisible}

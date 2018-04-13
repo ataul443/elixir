@@ -37,6 +37,7 @@
 
             if (e.data != 'collect') {
                 editor.insert(e.data);
+                window.postMessage("INSERTED");
 
             } else {
                 let textLinesArray = editor.getSession().getValue();

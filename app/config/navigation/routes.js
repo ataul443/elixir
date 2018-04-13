@@ -60,8 +60,12 @@ menuRoutes.unshift({
   screen: Screens.GridV1,
   */
 
+  /*
   id: "Scanner",
   title: "Scanner",
+*/
+  id: "CodeEditor",
+    title: "Code Dojo",
   screen: Screens.Scanner,
 
   children: []
