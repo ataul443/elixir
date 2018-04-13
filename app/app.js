@@ -10,6 +10,10 @@ import { AppLoading, Font } from "expo";
 import { View } from "react-native";
 import IOSCreen from "./screens/editor/io";
 import OutputScreen from "./screens/editor/output";
+import { NavBar } from "./components/index";
+
+
+let ThemedNavigationBar = withRkTheme(NavBar);
 
 bootstrap();
 data.populateData();
@@ -25,16 +29,41 @@ function getCurrentRouteName(navigationState) {
   return route.routeName;
 }
 const IONavigator = StackNavigator({
+  
+  
   IOScreen: {
     screen: IOSCreen
   },
   Output: {
     screen: OutputScreen
-  }
+  },
+},{
+  headerMode: 'screen',
+  cardStyle: { backgroundColor: "transparent" },
+      
+      navigationOptions: ({ navigation, screenProps }) => ({
+        gesturesEnabled: false,
+        header: headerProps => {
+          return (
+            <ThemedNavigationBar
+              navigation={navigation}
+              headerProps={headerProps}
+            />
+          );
+        }
+      })
 });
 let SideMenu = withRkTheme(Screens.SideMenu);
 const KittenApp = StackNavigator(
   {
+    First: {
+      screen: Screens.SplashScreen
+    },
+    Auth:{
+      screen: Screens.LoginV2,
+    },
+   
+    
     Home: {
       screen: DrawerNavigator(
         {
@@ -50,20 +79,16 @@ const KittenApp = StackNavigator(
     },
     IO: {
       screen: IONavigator
-    }
-  },
-
+    },
+  
+  
+},
   {
     headerMode: "none"
   }
 );
 /*
-  First: {
-    screen: Screens.SplashScreen
-  },
-  Auth:{
-    screen: Screens.LoginV2,
-  },
+  
   */
 
 export default class App extends React.Component {

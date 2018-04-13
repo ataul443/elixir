@@ -12,44 +12,53 @@ import { StackNavigator, NavigationActions } from "react-navigation";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import { RkStyleSheet, RkPicker } from "react-native-ui-kitten";
-import { Button, Card, } from "react-native-elements";
+import { Button, Card } from "react-native-elements";
 import ActionButton from "react-native-action-button";
+import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
+
 
 let moment = require("moment");
 
 const languages = [{ key: 1, value: "Jun" }, { key: 2, value: "Feb" }];
 
 export default class IO extends React.Component {
-  static navigationOptions = ({ navigation }) => {
+  static navigationOptions = ({ navigate }) => {
     return {
       title: "IO".toUpperCase(),
+      /** 
       headerLeft: (
         <Entypo
           style={{ marginLeft: 10 }}
           name="chevron-left"
           size={32}
           colors="black"
-          onPress={navigation => {
+          onPress={() => {
+          
             let resetAction = NavigationActions.reset({
               index: 0,
               actions: [
                 NavigationActions.navigate({routeName: 'GridV1'})
               ]
             });
-            this.props.navigation.dispatch(resetAction)
+            navigation.dispatch(resetAction)
+          
+            navigate('Scanner');
           }}
         />
       )
+      */
     };
   };
 
   constructor(props) {
     super(props);
-    let codeText = props.navigation.state.params.code;
+    let codeText = null;
+    if(props.navigation.state.params) codeText = props.navigation.state.params.code;
+     
     if (!codeText || codeText.length == 0 ){
        codeText = "//! NO Code Found !\n\n";
 
-       alert("No COde Found");
+       //alert("No COde Found");
     }else{
       //alert(codeText);
     }
@@ -170,6 +179,7 @@ export default class IO extends React.Component {
       </View>
     );
     let fab = (
+      /*
       <ActionButton
         buttonColor="rgb(66, 194, 244)"
         nativeFeedbackRippleColor="rgba(255,255,255,0.75)"
@@ -180,53 +190,66 @@ export default class IO extends React.Component {
           this.openModal();
         }}
       />
+      */
+     <Button
+          small
+          raised
+          
+          buttonStyle={{
+            borderRadius: 30,
+            backgroundColor: "#EA4265",
+            height: scaleVertical(44),
+          }}
+          containerViewStyle={{
+            borderRadius: 30,
+            width: scale(120),
+            
+            marginBottom: scaleVertical(40),
+            height: scaleVertical(44),
+          }}
+          backgroundColor="#EA4265"
+          title="Run Code"
+          underlayColor = "transparent"
+          textStyle={{  fontSize: 16  }}
+          onPress={() => {
+            this.openModal();
+            //this.props.navigation.navigate('IO');
+          }}
+        />
     );
 
     let modal = this.state.modalIdentifier != "picker" ? loader : imageCrop;
 
     let fabButton =
-      this.state.userInput && this.state.expectedOutput ? fab : false;
+      this.state.userInput && this.state.expectedOutput ? fab : fab;
 
     return (
       <View style={styles.container}>
-      {/** 
+      
         <View style={{ flex: 1, flexDirection: "column" }}>
-          <Text
-            style={{
-              marginTop: 40,
-              marginLeft: 40,
-              fontWeight: "bold",
-              fontSize: 16
-            }}
-          >
-            {" "}
-            User Input:
-          </Text>
-          <View
-            style={{
-              marginLeft: 40,
-              marginTop: 20,
-              width: "80%",
-              height: 100,
-              borderRadius: 8,
-              backgroundColor: "white"
-            }}
-          >
-            <TextInput
-              multiline
-              style={{
-                marginLeft: "5%",
-                marginTop: "5%",
-                width: "80%",
-                marginRight: "5%"
-              }}
-              onChangeText={value => {
-                this.setState({ userInput: value });
-              }}
-            />
-          </View>
+        <Card title='User Input'>
+        <TextInput multiline
+        underlineColorAndroid='transparent'
+        value={this.state.userInput}
+        style={{
+    
+         height: scale(80),
+          margin: scale(10),
+          padding: scale(10),
+          borderColor: "#b2bec3",
+          borderWidth: 1,
+          textAlignVertical: 'top'
+        
+      }}
+      onChangeText={(value)=>{
+        this.setState({userInput: value})
+      }}
+      ></TextInput>
+
+        </Card>
         </View>
-        */}
+        
+        
 
         <Modal
           isVisible={this.state.modalVisible}
@@ -243,42 +266,33 @@ export default class IO extends React.Component {
         </Modal>
 
         <View style={{ flex: 1, flexDirection: "column" }}>
-          <Text
-            style={{
-              marginTop: 40,
-              marginLeft: 40,
-              fontWeight: "bold",
-              fontSize: 16
-            }}
-          >
-            {" "}
-            Expected Output:
-          </Text>
-          <View
-            style={{
-              marginLeft: 40,
-              marginTop: 20,
-              width: "80%",
-              height: 100,
-              borderRadius: 8,
-              backgroundColor: "white"
-            }}
-          >
-            <TextInput
-              multiline
-              style={{
-                marginLeft: "5%",
-                marginTop: "5%",
-                width: "80%",
-                marginRight: "5%"
-              }}
-              onChangeText={value => {
-                this.setState({ expectedOutput: value });
-              }}
-            />
-          </View>
-        </View>
+          
+            <Card title='Expected Output'>
+            <TextInput multiline
+            
+            
+            underlineColorAndroid='transparent'
+            value={this.state.expectedOutput}
+        style={{
+    
+         height: scale(80),
+          margin: scale(10),
+          padding: scale(10),
+          borderColor: "#b2bec3",
+          borderWidth: 1,
+          textAlignVertical: 'top'
+        
+      }}
+      onChangeText={(value)=>{
+        this.setState({expectedOutput: value})
+      }}
+      ></TextInput>
+
+            </Card>
+      </View>
+      <View style={{justifyContent: 'center',alignItems:'center'}}>
         {fabButton}
+        </View>
       </View>
     );
   }

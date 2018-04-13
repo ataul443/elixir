@@ -5,7 +5,8 @@ import {
   View,
   Text,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
+  StatusBar
 } from "react-native";
 import { ImagePicker } from "expo";
 
@@ -188,6 +189,7 @@ export class Scanner extends React.Component {
     })
       .then(res => {
         let responseObj = JSON.parse(res._bodyText);
+        console.log(res);
         let textString = responseObj.text;
         console.log(textString, "text String");
         this.closeModal();
@@ -366,6 +368,7 @@ export class Scanner extends React.Component {
     return (
       <View style={styles.container}>
         <Modal
+
           isVisible={this.state.modalVisible}
           onBackButtonPress={() => {
             this.onResetModal();

@@ -32,7 +32,6 @@ export class CodeEditor extends React.Component {
     this.onMessage = this.onMessage.bind(this);
     let inputText = null;
     if(props.navigation.state.params) inputText = props.navigation.state.params.textCode;
-    console.log(inputText);
     if (!inputText || inputText.length == 0)
       inputText = "//! NO Code Found !\n\n";
     this.state = {
@@ -51,7 +50,10 @@ export class CodeEditor extends React.Component {
     }else{
     this.setState({modalVisible: false});
     console.log("message", event.nativeEvent.data);
-    this.props.navigation.navigate("IO", { code: this.state.inputData });
+    let data = event.nativeEvent.data;
+    //"//! NO Code Found !\n//Welcome To APP"
+    if( data == null || data.length  < 0) alert("Code Not Found");
+    else this.props.navigation.navigate("IO", { code: data  });
     }
   }
 

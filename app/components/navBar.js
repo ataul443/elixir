@@ -42,6 +42,7 @@ export class NavBar extends React.Component {
 
     let renderLeftContent = () => {
       let index = _.findIndex(this.props.headerProps.scenes, {isActive: true});
+
       if (index > 0) {
         return <RkButton
           rkType='clear'
@@ -53,6 +54,16 @@ export class NavBar extends React.Component {
         </RkButton>
       }
       else {
+        if(this.props.headerProps.scene.route.routeName == 'IOScreen'){
+          return <RkButton
+          rkType='clear'
+          style={styles.menu}
+          onPress={() => {
+            this.props.navigation.navigate('CodeEditor')
+          }}>
+          <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
+        </RkButton>
+        }else{
         return <RkButton
           rkType='clear'
           style={styles.menu}
@@ -62,6 +73,7 @@ export class NavBar extends React.Component {
           <RkText rkType='awesome'>{FontAwesome.bars}</RkText>
         </RkButton>
       }
+    }
     };
 
     return (

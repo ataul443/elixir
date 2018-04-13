@@ -32,7 +32,7 @@ export class DoughnutChart extends RkComponent {
 
       case 'TLE':
       statusCode = 'TLE'
-      status = 'Accepted Answer';
+      status = 'Time Limit Exceeded';
       colors = RkTheme.current.colors.charts.doughnut[1];
       break;
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, ScrollView, Dimensions } from "react-native";
+import { View, Image, ScrollView, Dimensions,Text } from "react-native";
 
 import { RkText, RkStyleSheet, RkTheme } from "react-native-ui-kitten";
 
@@ -17,28 +17,21 @@ export default class Output extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Output".toUpperCase(),
-      headerLeft: (
-        <Entypo
-          style={{ marginLeft: 10 }}
-          name="chevron-left"
-          size={32}
-          colors="black"
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      )
     };
   };
 
   constructor(props) {
     super(props);
-    let respBody = this.props.navigation.state.params.codeResponse;
+    let respBody = null;
+    if(this.props.navigation.state.params) respBody = this.props.navigation.state.params.codeResponse;
+    else respBody = {"true": true}
     console.log(respBody);
     this.status = "CE";
-
+    this.error = null;
     if (respBody.run_status) {
       status = respBody.run_status.status;
+    }else{
+      this.error = respBody.error;
     }
     this.data = {
       statItems: [
@@ -72,10 +65,19 @@ export default class Output extends React.Component {
         marginTop: 40
       }
     ];
+    let errors = [];
+    this.error.forEach(element => {
+      console.log(element)
+      errors.push(<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10,color:RkTheme.current.colors.charts.doughnut[3]}}>{element}</Text>);
+    })
     return (
       <ScrollView style={styles.screen}>
         <View style={chartBlockStyles}>
-          <DoughnutChart status={this.status} />
+          <DoughnutChart status={this.status}/>
+        </View>
+        <View style={chartBlockStyles}>
+        <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Error: </Text>
+        {errors}
         </View>
       </ScrollView>
     );
