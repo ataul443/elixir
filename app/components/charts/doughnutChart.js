@@ -18,16 +18,17 @@ export class DoughnutChart extends RkComponent {
     let status = this.props.status;
     let colors = null;
     let statusCode = "CE";
+    console.log(status,"dougnut status")
     switch(status){
       case 'CE':
       status = 'Compilation Errors';
-      colors = RkTheme.current.colors.charts.doughnut[3];
+      colors = RkTheme.current.colors.charts.doughnut[0];
       break;
 
       case 'AC':
       statusCode = 'AC'
       status = 'Accepted Answer';
-      colors = RkTheme.current.colors.charts.doughnut[0];
+      colors = RkTheme.current.colors.charts.doughnut[2];
       break;
 
       case 'TLE':
@@ -37,9 +38,9 @@ export class DoughnutChart extends RkComponent {
       break;
 
       case 'WA':
-      statusCode = 'TLE'
+      statusCode = 'WA'
       status = 'Wrong Answer';
-      colors = RkTheme.current.colors.charts.doughnut[2];
+      colors = RkTheme.current.colors.charts.doughnut[3];
       break;
       
       

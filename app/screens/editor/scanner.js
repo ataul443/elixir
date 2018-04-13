@@ -90,7 +90,7 @@ export class Scanner extends React.Component {
     if(picker == 'Camera') imagePicker = ImagePicker.launchCameraAsync;
     else imagePicker = ImagePicker.launchImageLibraryAsync;
     let result = await imagePicker({
-      base64: crop,
+      base64: true,
       allowsEditing: crop,
       aspect: [4, 3]
     });
@@ -106,6 +106,7 @@ export class Scanner extends React.Component {
       //console.log(result,"full size base64");
       
       this.setState({ image: result, modalContent: "imageFilter" });
+      console.log(this.state.image);
       this.openModal();
     }
 

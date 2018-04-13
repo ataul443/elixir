@@ -7,7 +7,8 @@ import {
   ActivityIndicator,
   WebView,
   Picker,
-  TextInput
+  TextInput,
+  Keyboard
 } from "react-native";
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
 
@@ -41,7 +42,8 @@ export class CodeEditor extends React.Component {
       modalVisible: false,
       language: "Select",
       modalContent: "loader",
-      fab: false
+      fab: false,
+      runButton: true
     };
   }
   onMessage(event) {
@@ -74,7 +76,10 @@ export class CodeEditor extends React.Component {
   };
 
   componentDidMount() {
-    this.onModalOpen();
+    //this.onModalOpen();
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide); 
+
     let inputText = this.state.inputData;
     console.log(inputText, "Inserting Code Man");
     //this.webview.injectJavaScript(`editor.insert("${inputText}");`);
@@ -117,6 +122,20 @@ export class CodeEditor extends React.Component {
       })
       .catch(error => console.log(error));
   };
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow(){
+    this.setState({runButton: false});
+  }
+  _keyboardDidHide(){
+    this.setState({runButton: true});
+  }
+
+
 
   render() {
 
@@ -178,7 +197,7 @@ export class CodeEditor extends React.Component {
         />
     );
 
-    let fabButton = this.state.fab ? fab : false;
+    let fabButton = this.state.fab && this.state.runButton ? fab : false;
 
     return (
       <View style={styles.container}>

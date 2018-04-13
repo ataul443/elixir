@@ -6,7 +6,8 @@ import {
   Text,
   TextInput,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
+  Keyboard
 } from "react-native";
 import { StackNavigator, NavigationActions } from "react-navigation";
 import { Ionicons, Entypo } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ import { RkStyleSheet, RkPicker } from "react-native-ui-kitten";
 import { Button, Card } from "react-native-elements";
 import ActionButton from "react-native-action-button";
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
+
 
 
 let moment = require("moment");
@@ -70,8 +72,29 @@ export default class IO extends React.Component {
       modalIdentifier: "picker",
       code: codeText,
       userInput: "",
-      expectedOutput: ""
+      expectedOutput: "",
+      runButton: true
     };
+  }
+
+  componentDidMount(){
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide); 
+   }
+  componentDidUpdate(){
+
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow(){
+    this.setState({runButton: false});
+  }
+  _keyboardDidHide(){
+    this.setState({runButton: true});
   }
 
   runCode = () => {
@@ -103,6 +126,7 @@ export default class IO extends React.Component {
         let respBody = JSON.parse(res._bodyText);
         console.log(respBody);
         this.closeModal();
+        this.setState({modalIdentifier: 'picker'})
         this.props.navigation.navigate("Output", {
           codeResponse: respBody
         });
@@ -221,7 +245,7 @@ export default class IO extends React.Component {
     let modal = this.state.modalIdentifier != "picker" ? loader : imageCrop;
 
     let fabButton =
-      this.state.userInput && this.state.expectedOutput ? fab : fab;
+    this.state.runButton && this.state.userInput && this.state.expectedOutput ? fab : false;
 
     return (
       <View style={styles.container}>

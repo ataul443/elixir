@@ -28,8 +28,8 @@ export default class Output extends React.Component {
     console.log(respBody);
     this.status = "CE";
     this.error = null;
-    if (respBody.run_status) {
-      status = respBody.run_status.status;
+    if (respBody.compile_status == "OK") {
+      this.status = respBody.run_status.status;
     }else{
       this.error = respBody.error;
     }
@@ -66,19 +66,24 @@ export default class Output extends React.Component {
       }
     ];
     let errors = [];
-    this.error.forEach(element => {
-      console.log(element)
-      errors.push(<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10,color:RkTheme.current.colors.charts.doughnut[3]}}>{element}</Text>);
-    })
+    if(this.error!= null && this.error.length > 0){
+      this.error.forEach(element => {
+        console.log(element)
+        errors.push(<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10,color:RkTheme.current.colors.charts.doughnut[3]}}>{element}</Text>);
+      })
+    }
+    let errorView = (<View style={chartBlockStyles}>
+        
+      <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Error: </Text>
+      {errors}
+      </View>)
     return (
       <ScrollView style={styles.screen}>
         <View style={chartBlockStyles}>
           <DoughnutChart status={this.status}/>
         </View>
-        <View style={chartBlockStyles}>
-        <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Error: </Text>
-        {errors}
-        </View>
+        {this.error? (errorView): false}
+        
       </ScrollView>
     );
   }
