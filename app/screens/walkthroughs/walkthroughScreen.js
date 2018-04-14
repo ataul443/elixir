@@ -2,14 +2,17 @@ import React from 'react';
 import {
   View,
   AsyncStorage,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native';
-import {RkStyleSheet} from 'react-native-ui-kitten';
+import {RkStyleSheet,RkTheme} from 'react-native-ui-kitten';
 import {GradientButton} from '../../components/';
 import {Walkthrough} from '../../components/walkthrough';
 import {Walkthrough1} from './walkthrough1';
 import {Walkthrough2} from './walkthrough2';
 import {PaginationIndicator} from '../../components';
+import {DarkKittenTheme} from '../../config/darkTheme';
+import {NavigationActions} from 'react-navigation'
 
 
 export default class WalkthroughScreen extends React.Component {
@@ -57,6 +60,9 @@ export default class WalkthroughScreen extends React.Component {
   }
 
   render() {
+    RkTheme.setTheme(DarkKittenTheme);
+    StatusBar.setBarStyle('light-content', true);
+    Platform.OS == 'android' && StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
     return (
       <View style={styles.screen}>
         <Walkthrough onChanged={(index) => this.changeIndex(index)}>
@@ -69,7 +75,7 @@ export default class WalkthroughScreen extends React.Component {
           style={styles.button}
           text="GET STARTED"
           onPress={() => {
-            this.props.navigation.goBack()
+            this._toHome();
           }}/>
       </View>
     )

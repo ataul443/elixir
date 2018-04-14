@@ -5,6 +5,7 @@ import React from 'react'
 import {FontAwesome,Ionicons}from "@expo/vector-icons";
 
 export const MainRoutes = [
+  
   {
     id: "Scanner",
     title: "Scanner",
@@ -24,6 +25,13 @@ export const MainRoutes = [
     title: "QR Reader",
   icon: <FontAwesome name="qrcode" size={40}></FontAwesome>,
     screen: Screens.QRScanner,
+    children: []
+  },
+  {
+    id: "Profile",
+    title: "Profile",
+  icon: FontIcons.profile,
+    screen: Screens.ProfileV1,
     children: []
   },
 ];
@@ -50,6 +58,14 @@ export const SideRoutes = [
     screen: Screens.QRScanner,
     children: []
   },
+  {
+    id: "Profile",
+    title: "Profile",
+  icon: FontIcons.profile,
+    screen: Screens.ProfileV1,
+    children: []
+  },
+  
 ];
 let menuRoutes = _.cloneDeep(MainRoutes);
 menuRoutes.unshift({

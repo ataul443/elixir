@@ -41,9 +41,7 @@ const IONavigator = StackNavigator({
   Output: {
     screen: OutputScreen
   },
-  Walkthrough: {
-    screen: Walkthrough
-  }
+ 
 },{
   headerMode: 'screen',
   cardStyle: { backgroundColor: "transparent" },
@@ -68,6 +66,9 @@ const KittenApp = StackNavigator(
     },
     Auth:{
       screen: Screens.LoginV2,
+    },
+    Walkthrough: {
+      screen: Walkthrough
     },
    
     

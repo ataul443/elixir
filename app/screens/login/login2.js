@@ -4,7 +4,9 @@ import {
   View,
   Image,
   Keyboard,
-  AsyncStorage
+  AsyncStorage,
+  StatusBar,
+  Platform
 } from 'react-native';
 import {
   RkButton,
@@ -18,6 +20,7 @@ import Loader from '../../components/loader';
 import {RkTheme} from 'react-native-ui-kitten';
 import {scale, scaleModerate, scaleVertical} from '../../utils/scale';
 import {NavigationActions} from 'react-navigation';
+import {DarkKittenTheme} from '../../config/darkTheme';
 
 
 export class LoginV2 extends React.Component {
@@ -50,7 +53,10 @@ export class LoginV2 extends React.Component {
       if (result.type === 'success') {
         console.log("result => ",result);
         console.log(result.user)
-        await AsyncStorage.setItem('@AuthStore:user',JSON.stringify(result.user));
+        let user = result.user;
+        user.codeScan = 0;
+        user.qrScan = 0;
+        await AsyncStorage.setItem('@AuthStore:user',JSON.stringify(user));
         this.setState({loading: false});
         this._resetNavigationStateToHome();
         return result.accessToken;
@@ -75,6 +81,9 @@ export class LoginV2 extends React.Component {
   }
   
   render() {
+    RkTheme.setTheme(DarkKittenTheme);
+              StatusBar.setBarStyle('light-content', true);
+              Platform.OS == 'android' && StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
     let renderIcon = () => {
       if (RkTheme.current.name === 'light')
         return <Image style={styles.image} source={require('../../assets/images/logo.png')}/>;

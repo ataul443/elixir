@@ -2,11 +2,13 @@ import React from 'react';
 import {
   View,
   ScrollView,
+  AsyncStorage
 } from 'react-native';
 import {
   RkText,
   RkButton, RkStyleSheet
 } from 'react-native-ui-kitten';
+import {NavigationActions} from 'react-navigation';
 import {Avatar} from '../../components/avatar';
 import {Gallery} from '../../components/gallery';
 import {data} from '../../data/';
@@ -19,9 +21,40 @@ export class ProfileV1 extends React.Component {
 
   constructor(props) {
     super(props);
+
     let {params} = this.props.navigation.state;
     let id = params ? params.id : 1;
     this.user = data.getUser(id);
+    this.state = {
+      user: {
+      name: 'Your Profile',
+      photoUrl: '#'
+      },
+    }
+
+  }
+
+  componentDidMount(){
+    console.log("I am running!");
+    this._loadData();
+  }
+
+  async _loadData(){
+    const user1 = await AsyncStorage.getItem('@AuthStore:user');
+    let user = JSON.parse(user1);
+    console.log(user);
+
+    if(user === null){
+      let resetAction = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: 'Auth'})]
+      });
+      this.props.navigation.dispatch(resetAction);
+    }else{
+      console.log("User setting...",user);
+      this.setState({user: user});
+      console.log("User set");
+    }
   }
 
   render() {
@@ -30,21 +63,21 @@ export class ProfileV1 extends React.Component {
     return (
       <ScrollView style={styles.root}>
         <View style={[styles.header, styles.bordered]}>
-          <Avatar img={this.user.photo} rkType='big'/>
-          <RkText rkType='header2'>{name}</RkText>
+          <Avatar img={{uri: this.state.user.photoUrl}} rkType='big'/>
+          <RkText rkType='header2'>{this.state.user.name}</RkText>
         </View>
         <View style={[styles.userInfo, styles.bordered]}>
           <View style={styles.section}>
-            <RkText rkType='header3' style={styles.space}>{this.user.postCount}</RkText>
-            <RkText rkType='secondary1 hintColor'>Posts</RkText>
+            <RkText rkType='header3' style={styles.space}>{this.state.user.codeScan}</RkText>
+            <RkText rkType='secondary1 hintColor'>Code Scans</RkText>
           </View>
           <View style={styles.section}>
             <RkText rkType='header3' style={styles.space}>{formatNumber(this.user.followersCount)}</RkText>
             <RkText rkType='secondary1 hintColor'>Followers</RkText>
           </View>
           <View style={styles.section}>
-            <RkText rkType='header3' style={styles.space}>{this.user.followingCount}</RkText>
-            <RkText rkType='secondary1 hintColor'>Following</RkText>
+            <RkText rkType='header3' style={styles.space}>{this.state.user.qrScan}</RkText>
+            <RkText rkType='secondary1 hintColor'>QR Scans</RkText>
           </View>
         </View>
         <View style={styles.buttons}>

@@ -59,7 +59,7 @@ export class NavBar extends React.Component {
           rkType='clear'
           style={styles.menu}
           onPress={() => {
-            this.props.navigation.navigate('CodeEditor')
+            this.props.navigation.goBack();
           }}>
           <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
         </RkButton>

@@ -6,7 +6,8 @@ import {
   Text,
   ActivityIndicator,
   ScrollView,
-  StatusBar
+  StatusBar,
+  AsyncStorage
 } from "react-native";
 import { ImagePicker } from "expo";
 import { RkCard, RkText, RkStyleSheet, RkButton } from "react-native-ui-kitten";
@@ -188,6 +189,7 @@ export class Scanner extends React.Component {
       body: JSON.stringify({ fileToUpload: imageData, type: "png" })
     })
       .then(res => {
+        this._loadData();
         let responseObj = JSON.parse(res._bodyText);
         console.log(res);
         let textString = responseObj.text;
@@ -220,6 +222,19 @@ export class Scanner extends React.Component {
   renderAsset = image => {
     return this.renderImage(image);
   };
+
+  _loadData = async ()=>{
+    const user1 = await AsyncStorage.getItem('@AuthStore:user');
+    let user = JSON.parse(user1);
+
+    if(user.codeScan == null){
+      user.codeScan = 0;
+    }else{
+      user.codeScan += 1; 
+    }
+
+    await AsyncStorage.setItem('@AuthStore:user',JSON.stringify(user));
+  }
 
   render() {
     let { image } = this.state;

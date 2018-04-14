@@ -94,178 +94,194 @@ export class QRScanner extends React.Component {
   }
 
  barcodeUpload = barcodeData => {
-    console.log("Running....");
-    let barcodeUploadUrl = 'http://tesseract.eastus.cloudapp.azure.com/tutorials.php';
-    console.log(barcodeData,"QR Data");
-    fetch(barcodeUploadUrl, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify({ hash: barcodeData })
-    })
-      .then(res => {
-        console.log(res);
-        let responseObj = JSON.parse(res._bodyText);
-        let message = null;
-        let status = responseObj.status;
-        this.closeModal();
-        switch(status){
-            case 305:
-            //
-            break;
+      console.log("Running....");
+      let barcodeUploadUrl = 'http://tesseract.eastus.cloudapp.azure.com/tutorials.php';
+      console.log(barcodeData,"QR Data");
+      fetch(barcodeUploadUrl, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        method: "POST",
+        body: JSON.stringify({ hash: barcodeData })
+      })
+        .then(res => {
+          console.log(res);
+          let responseObj = JSON.parse(res._bodyText);
+          let message = null;
+          let status = responseObj.status;
+          this.closeModal();
+          switch(status){
+              case 305:
+              //
+              break;
 
-            case 301:
-            message = 'Invalid request.\nPlease Try again!';
-            break;
+              case 301:
+              message = 'Invalid request.\nPlease Try again!';
+              break;
 
-            case 302:
-            message = 'Invalid JSON.\nPlease Try again!';
-            break;
+              case 302:
+              message = 'Invalid JSON.\nPlease Try again!';
+              break;
 
-            case 200:
-            message = responseObj.question;
-            this.onResetModal();
-            this.closeModal();
-            this.props.navigation.navigate('CodeEditor',{
-                textCode: message
-            })
-            break;
+              case 200:
+              this._loadData();
+              message = responseObj.question;
+              this.onResetModal();
+              this.closeModal();
+              this.props.navigation.navigate('CodeEditor',{
+                  textCode: message
+              })
+              break;
 
-            case 404:
-            message = 'Invalid QR Code.\nPlease Try again!';
-            break;
+              case 404:
+              message = 'Invalid QR Code.\nPlease Try again!';
+              break;
 
-        }
-      })  
-      .catch(error => {
-        this.setState({
-          modalVisible: false,
+          }
+        })  
+        .catch(error => {
+          this.setState({
+            modalVisible: false,
+          });
+          console.log(error)
+          alert("Error!\nPlease try again.");
         });
-        console.log(error)
-        alert("Error!\nPlease try again.");
-      });
-  };
+};
 
-  renderImage = image => {
-    return (
-      <Image
-        style={{ width: 300, height: 200, resizeMode: "contain" }}
-        source={image}
-      />
-    );
-  };
 
-  renderAsset = image => {
-    return this.renderImage(image);
-  };
+async _loadData(){
+  const user1 = await AsyncStorage.getItem('@AuthStore:user');
+  let user = JSON.parse(user1);
 
-  render() {
-
-    const loader = (
-      <View style={styles.modalContent}>
-        <ActivityIndicator size="large" />
-        <Text
-          style={{
-            textAlign: "center",
-            textAlignVertical: "center",
-            marginLeft: 10
-          }}
-        >
-          {this.state.uploadStatus}
-        </Text>
-      </View>
-    );
-
-    let contentModal = loader;
-    let codeScanner = (<View style={{ flex: 1 }}>
-        <Expo.BarCodeScanner
-          onBarCodeRead={this._handleBarCodeRead}
-          barCodeTypes={[Expo.BarCodeScanner.Constants.BarCodeType.qr]}
-          style={{ marginTop: scaleVertical(70) ,height: scaleVertical(450), width: scale(280) }}
-        />
-        </View>);
-
-    codeScanner = this.state.barCode ? codeScanner: false;
-    codeScannerIntro = (
-    <View>
-    <View style={{ flex: 1,alignItems:'center',justifyContent:'center'}}>
-    <Text>Welcome</Text>
-    <Text>Scan QR Code</Text>
-    </View>
-    <Button
-          small
-          raised
-          
-          buttonStyle={{
-            borderRadius: 30,
-            backgroundColor: "#EA4265",
-            height: scaleVertical(44),
-          }}
-          containerViewStyle={{
-            borderRadius: 30,
-            width: scale(120),
-            marginBottom: scaleVertical(60),
-            height: scaleVertical(44),
-          }}
-          backgroundColor="#EA4265"
-          title="Scan QR"
-          underlayColor = "transparent"
-          textStyle={{  fontSize: 16  }}
-          onPress={() => {
-            //this.openModal();
-            //this.props.navigation.navigate('IO');
-            this.setState({barCode: true})
-          }}
-        />
-    </View>
-    );
-
-    codeScannerIntro = this.state.barCode? false: codeScannerIntro;
-    return (
-      <View style={styles.container}>
-      {codeScanner}
-        <Modal
-
-          isVisible={this.state.modalVisible}
-          onBackButtonPress={() => {
-            this.onResetModal();
-          }}
-          onModalHide={() => {
-            this.onModalHidden();
-          }}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalInnerContainer}>{contentModal}</View>
-          </View>
-        </Modal>
-        {codeScannerIntro}
-        
-
-        {/*
-            onPress={() => {
-            this.props.navigation.navigate("editor", {
-              textCode: this.state.textCode
-            });
-          }}
-            */}
-        
-      </View>
-    );
-    /*
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Button
-          title="Pick an image from camera roll"
-          onPress={this._pickImage}
-        />
-        {image &&
-          <Image source={{ uri: image.uri }} style={{ width: 200, height: 200, resizeMode: 'contain' }} />}
-      </View>
-    );
-    */
+  if(user.codeScan == null){
+    user.qrScan = 0;
+  }else{
+    user.qrScan += 1; 
   }
+
+  await AsyncStorage.setItem('@AuthStore:user',JSON.stringify(user));
+}
+
+renderImage = image => {
+  return (
+    <Image
+      style={{ width: 300, height: 200, resizeMode: "contain" }}
+      source={image}
+    />
+  );
+};
+
+renderAsset = image => {
+  return this.renderImage(image);
+};
+
+render() {
+
+  const loader = (
+    <View style={styles.modalContent}>
+      <ActivityIndicator size="large" />
+      <Text
+        style={{
+          textAlign: "center",
+          textAlignVertical: "center",
+          marginLeft: 10
+        }}
+      >
+        {this.state.uploadStatus}
+      </Text>
+    </View>
+  );
+
+  let contentModal = loader;
+  let codeScanner = (<View style={{ flex: 1 }}>
+      <Expo.BarCodeScanner
+        onBarCodeRead={this._handleBarCodeRead}
+        barCodeTypes={[Expo.BarCodeScanner.Constants.BarCodeType.qr]}
+        style={{ marginTop: scaleVertical(70) ,height: scaleVertical(450), width: scale(280) }}
+      />
+      </View>);
+
+  codeScanner = this.state.barCode ? codeScanner: false;
+  codeScannerIntro = (
+  <View>
+  <View style={{ flex: 1,alignItems:'center',justifyContent:'center'}}>
+  <Text>Welcome</Text>
+  <Text>Scan QR Code</Text>
+  </View>
+  <Button
+        small
+        raised
+        
+        buttonStyle={{
+          borderRadius: 30,
+          backgroundColor: "#EA4265",
+          height: scaleVertical(44),
+        }}
+        containerViewStyle={{
+          borderRadius: 30,
+          width: scale(120),
+          marginBottom: scaleVertical(60),
+          height: scaleVertical(44),
+        }}
+        backgroundColor="#EA4265"
+        title="Scan QR"
+        underlayColor = "transparent"
+        textStyle={{  fontSize: 16  }}
+        onPress={() => {
+          //this.openModal();
+          //this.props.navigation.navigate('IO');
+          this.setState({barCode: true})
+        }}
+      />
+  </View>
+  );
+
+  codeScannerIntro = this.state.barCode? false: codeScannerIntro;
+  return (
+    <View style={styles.container}>
+    {codeScanner}
+      <Modal
+
+        isVisible={this.state.modalVisible}
+        onBackButtonPress={() => {
+          this.onResetModal();
+        }}
+        onModalHide={() => {
+          this.onModalHidden();
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalInnerContainer}>{contentModal}</View>
+        </View>
+      </Modal>
+      {codeScannerIntro}
+      
+
+      {/*
+          onPress={() => {
+          this.props.navigation.navigate("editor", {
+            textCode: this.state.textCode
+          });
+        }}
+          */}
+      
+    </View>
+  );
+  /*
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        title="Pick an image from camera roll"
+        onPress={this._pickImage}
+      />
+      {image &&
+        <Image source={{ uri: image.uri }} style={{ width: 200, height: 200, resizeMode: 'contain' }} />}
+    </View>
+  );
+  */
+}
+  
 }
 
 let styles = RkStyleSheet.create(theme => ({

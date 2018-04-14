@@ -54,5 +54,6 @@ export const AppRoutes = DrawerRoutes;
 export const ScannerRoutes = _.find(MainRoutes, { id: "Scanner" }).children;
 export const EditorRoutes = _.find(MainRoutes, { id: "CodeEditor" }).children;
 export const QRRoutes = _.find(MainRoutes, { id: "QRScanner" }).children;
+export const ProfileRoutes = _.find(MainRoutes, {id: "Profile"}).children;
 //export const GridRouts = _.find(MainRoutes, { id: "GridV1" }).children;
 
