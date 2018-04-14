@@ -8,7 +8,8 @@ import {
   WebView,
   Picker,
   TextInput,
-  Keyboard
+  Keyboard,
+  AsyncStorage,
 } from "react-native";
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
 
@@ -23,6 +24,7 @@ let moment = require("moment");
 const TOOLBAR_HEIGHT = 56;
 const { deviceWidth, deviceHeight } = Dimensions.get("window");
 
+let savedCode = null;
 export class CodeEditor extends React.Component {
   static navigationOptions = {
     title: "Code Dojo".toUpperCase()
@@ -33,7 +35,7 @@ export class CodeEditor extends React.Component {
     this.onMessage = this.onMessage.bind(this);
     let inputText = null;
     if(props.navigation.state.params) inputText = props.navigation.state.params.textCode;
-    if (!inputText || inputText.length == 0)
+    if (!inputText || inputText.length == 0 )
       inputText = "//! NO Code Found !\n\n";
     this.state = {
       webWidth: deviceWidth,
@@ -43,13 +45,36 @@ export class CodeEditor extends React.Component {
       language: "Select",
       modalContent: "loader",
       fab: false,
-      runButton: true
+      runButton: true,
+      
     };
+
+    if(this.state.inputData == "//! NO Code Found !\n\n" ){
+      console.log(this.state.inputData, 'Checking');
+      let saveData =  this._loader(true,false);
+      let savedData = saveData;
+      if(savedData){
+        this.state.inputData = savedData;
+        console.log(this.state.inputData,savedData ,'Checking Save');
+      }
+    }
   }
+
+  _loader = async (load,data)=>{
+    let saveData = null;
+    if(load) saveData = await AsyncStorage.getItem('CodeEditorStore:saveData');
+    else await AsyncStorage.setItem('CodeEditorStore:saveData',data)
+    return saveData;
+  }
+
+
+
+
   onMessage(event) {
     if(event.nativeEvent.data == 'INSERTED'){
       this.setState({modalVisible: false,fab: true})
     }else{
+    this._loader(false,event.nativeEvent.data);
     this.setState({modalVisible: false});
     console.log("message", event.nativeEvent.data);
     let data = event.nativeEvent.data;
@@ -128,10 +153,10 @@ export class CodeEditor extends React.Component {
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow(){
-    this.setState({runButton: false});
+  _keyboardDidShow = ()=>{
+    this.setState({runButton:true})
   }
-  _keyboardDidHide(){
+  _keyboardDidHide = ()=>{
     this.setState({runButton: true});
   }
 

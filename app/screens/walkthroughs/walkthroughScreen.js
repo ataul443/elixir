@@ -1,6 +1,8 @@
 import React from 'react';
 import {
-  View
+  View,
+  AsyncStorage,
+  StatusBar
 } from 'react-native';
 import {RkStyleSheet} from 'react-native-ui-kitten';
 import {GradientButton} from '../../components/';
@@ -10,7 +12,7 @@ import {Walkthrough2} from './walkthrough2';
 import {PaginationIndicator} from '../../components';
 
 
-export class WalkthroughScreen extends React.Component {
+export default class WalkthroughScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -22,6 +24,36 @@ export class WalkthroughScreen extends React.Component {
 
   changeIndex(index) {
     this.setState({index})
+  }
+  componentDidMount(){
+    StatusBar.setHidden(true, 'none');
+  }
+
+  _toHome = async ()=>{
+    const user = await AsyncStorage.getItem('@AuthStore:user')
+    let nextScreen = 'Home';
+    try{ 
+      if(user !== null){
+          
+        console.log("User Found");
+        return;
+      }else{
+        nextScreen = 'Auth';
+        console.log("User Not FOund!");
+        
+      }
+    }catch(e){
+      alert(error)
+      console.log(error);
+      
+    }
+    finally{
+      let toHome = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName: nextScreen})]
+      });
+      this.props.navigation.dispatch(toHome);
+    }
   }
 
   render() {

@@ -90,10 +90,10 @@ export default class IO extends React.Component {
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow(){
+  _keyboardDidShow = ()=>{
     this.setState({runButton: false});
   }
-  _keyboardDidHide(){
+  _keyboardDidHide = ()=>{
     this.setState({runButton: true});
   }
 

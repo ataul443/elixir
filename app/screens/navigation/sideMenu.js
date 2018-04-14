@@ -14,7 +14,7 @@ import {
   RkText,
   RkTheme
 } from 'react-native-ui-kitten';
-import {MainRoutes} from '../../config/navigation/routes';
+import {SideRoutes} from '../../config/navigation/routes';
 import {FontAwesome} from '../../assets/icons';
 
 export class SideMenu extends React.Component {
@@ -31,16 +31,23 @@ export class SideMenu extends React.Component {
 
   componentDidMount(){
     this._loadProfileIcon();
+    
   }
 
   _navigate(route) {
+    /*
     let resetAction = NavigationActions.reset({
       index: 0,
       actions: [
         NavigationActions.navigate({routeName: route.id})
       ]
     });
-    this.props.navigation.dispatch(resetAction)
+    */
+   let navigateAction = NavigationActions.navigate({
+     routeName: route.id,
+     params: {},
+   })
+    this.props.navigation.dispatch(navigateAction)
   }
 
   async _loadProfileIcon(){
@@ -67,14 +74,14 @@ export class SideMenu extends React.Component {
   }
 
   render() {
-    let menu = MainRoutes.map((route, index) => {
+    let menu = SideRoutes.map((route, index) => {
       return (
         <TouchableHighlight
           style={styles.container}
           key={route.id}
           underlayColor={RkTheme.current.colors.button.underlay}
           activeOpacity={1}
-          onPress={() => this._navigateAction(route)}>
+          onPress={() => this._navigate(route)}>
           <View style={styles.content}>
             <View style={styles.content}>
               <RkText style={styles.icon}
@@ -124,7 +131,9 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: 'center'
   },
   icon: {
+
     marginRight: 13,
+    marginTop: 19,
     width: 50,
     height: 50,
     borderRadius: 50

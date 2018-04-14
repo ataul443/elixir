@@ -9,7 +9,6 @@ import {
   StatusBar
 } from "react-native";
 import { ImagePicker } from "expo";
-
 import { RkCard, RkText, RkStyleSheet, RkButton } from "react-native-ui-kitten";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
@@ -400,7 +399,6 @@ export class Scanner extends React.Component {
         <Button
           small
           raised
-          
           buttonStyle={{
             borderRadius: 30,
             backgroundColor: "#EA4265",

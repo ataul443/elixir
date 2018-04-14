@@ -28,8 +28,10 @@ export default class Output extends React.Component {
     console.log(respBody);
     this.status = "CE";
     this.error = null;
+    this.output = null;
     if (respBody.compile_status == "OK") {
       this.status = respBody.run_status.status;
+      this.output = respBody.run_status.output;
     }else{
       this.error = respBody.error;
     }
@@ -72,6 +74,14 @@ export default class Output extends React.Component {
         errors.push(<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10,color:RkTheme.current.colors.charts.doughnut[3]}}>{element}</Text>);
       })
     }
+
+    let outputCode = (<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10}}>{this.output}</Text>)
+
+    let outputView = (<View style={chartBlockStyles}>
+        
+      <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Your Output: </Text>
+      {outputCode}
+      </View>)
     let errorView = (<View style={chartBlockStyles}>
         
       <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Error: </Text>
@@ -83,7 +93,7 @@ export default class Output extends React.Component {
           <DoughnutChart status={this.status}/>
         </View>
         {this.error? (errorView): false}
-        
+        {this.output? (outputView): false}
       </ScrollView>
     );
   }

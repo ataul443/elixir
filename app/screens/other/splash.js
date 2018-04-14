@@ -44,20 +44,27 @@ export class SplashScreen extends React.Component {
     try {
       
       const user = await AsyncStorage.getItem('@AuthStore:user')
+      const walkthrough = await AsyncStorage.getItem('@walkthrough');
 
-      if(user !== null){
-        
-        console.log("User Found");
-        return;
+      if(walkthrough === 'Walkthrough'){
+        const walkthroughScreen = await AsyncStorage.setItem('@walkthrough','Walkthrough');
+        nextScreen = walkthrough;
       }else{
-        nextScreen = 'Auth';
-        console.log("User Not FOund!");
+        if(user !== null){
         
+          console.log("User Found");
+          return;
+        }else{
+          nextScreen = 'Auth';
+          console.log("User Not FOund!");
+          
+        }
       }
+      
 
     } catch (error) {
       console.log(error)
-      nextScreen = 'Auth'
+      nextScreen = 'Auth';
       // Error retrieving data
     } finally{
       this.timer = setInterval(() => {
