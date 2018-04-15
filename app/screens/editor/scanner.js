@@ -470,9 +470,9 @@ let styles = RkStyleSheet.create(theme => ({
   },
   modalInnerContainer: {
     width: "80%",
-    height: "20%",
+    height: "25%",
     backgroundColor: "#fff",
-    borderRadius: 10
+    
   },
   modalContent: {
     flexDirection: "row",

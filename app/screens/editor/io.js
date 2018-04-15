@@ -7,7 +7,8 @@ import {
   TextInput,
   ActivityIndicator,
   ScrollView,
-  Keyboard
+  Keyboard,
+  CheckBox
 } from "react-native";
 import { StackNavigator, NavigationActions } from "react-navigation";
 import { Ionicons, Entypo } from "@expo/vector-icons";
@@ -17,8 +18,6 @@ import { Button, Card } from "react-native-elements";
 import ActionButton from "react-native-action-button";
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
 
-
-
 let moment = require("moment");
 
 const languages = [{ key: 1, value: "Jun" }, { key: 2, value: "Feb" }];
@@ -26,7 +25,7 @@ const languages = [{ key: 1, value: "Jun" }, { key: 2, value: "Feb" }];
 export default class IO extends React.Component {
   static navigationOptions = ({ navigate }) => {
     return {
-      title: "IO".toUpperCase(),
+      title: "IO".toUpperCase()
       /** 
       headerLeft: (
         <Entypo
@@ -55,16 +54,17 @@ export default class IO extends React.Component {
   constructor(props) {
     super(props);
     let codeText = null;
-    if(props.navigation.state.params) codeText = props.navigation.state.params.code;
-     
-    if (!codeText || codeText.length == 0 ){
-       codeText = "//! NO Code Found !\n\n";
+    if (props.navigation.state.params)
+      codeText = props.navigation.state.params.code;
 
-       //alert("No COde Found");
-    }else{
+    if (!codeText || codeText.length == 0) {
+      codeText = `//! NO Code Found !\n\n`;
+
+      //alert("No COde Found");
+    } else {
       //alert(codeText);
     }
-    
+
     this.state = {
       text: "Input Goes Here",
       language: "C++",
@@ -73,37 +73,50 @@ export default class IO extends React.Component {
       code: codeText,
       userInput: "",
       expectedOutput: "",
-      runButton: true
+      runButton: true,
+      checked: false
     };
   }
 
-  componentDidMount(){
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide); 
-   }
-  componentDidUpdate(){
-
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
   }
+  componentDidUpdate() {}
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow = ()=>{
-    this.setState({runButton: false});
-  }
-  _keyboardDidHide = ()=>{
-    this.setState({runButton: true});
-  }
+  _keyboardDidShow = () => {
+    this.setState({ runButton: false });
+  };
+  _keyboardDidHide = () => {
+    this.setState({ runButton: true });
+  };
 
   runCode = () => {
+    let expectedOut = this.state.expectedOutput;
+    if (
+      expectedOut == null ||
+      expectedOut == undefined ||
+      expectedOut.length == 0
+    )
+      expectedOut = 0;
     var params = {
       code: this.state.code,
       language: this.state.language,
       input: this.state.userInput,
-      output: this.state.expectedOutput
+      output: expectedOut
     };
+    console.log(params);
     var formBody = [];
     for (var property in params) {
       var encodeKey = encodeURI(property);
@@ -126,7 +139,7 @@ export default class IO extends React.Component {
         let respBody = JSON.parse(res._bodyText);
         console.log(respBody);
         this.closeModal();
-        this.setState({modalIdentifier: 'picker'})
+        this.setState({ modalIdentifier: "picker" });
         this.props.navigation.navigate("Output", {
           codeResponse: respBody
         });
@@ -146,6 +159,31 @@ export default class IO extends React.Component {
     return;
   };
   render() {
+    let expectedOutputInput = (
+      <View style={{ flex: 1, flexDirection: "column" }}>
+        <Card title="Expected Output">
+          <TextInput
+            multiline
+            underlineColorAndroid="transparent"
+            value={this.state.expectedOutput}
+            style={{
+              height: scale(80),
+              margin: scale(5),
+              padding: scale(5),
+              borderColor: "#b2bec3",
+              borderWidth: 1,
+              textAlignVertical: "top"
+            }}
+            onChangeText={value => {
+              this.setState({ expectedOutput: value });
+            }}
+          />
+        </Card>
+      </View>
+    );
+
+    expectedOutputInput = this.state.checked ? expectedOutputInput : false;
+
     const loader = (
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
         <ActivityIndicator size="large" />
@@ -215,65 +253,95 @@ export default class IO extends React.Component {
         }}
       />
       */
-     <Button
-          small
-          raised
-          
-          buttonStyle={{
-            borderRadius: 30,
-            backgroundColor: "#EA4265",
-            height: scaleVertical(44),
-          }}
-          containerViewStyle={{
-            borderRadius: 30,
-            width: scale(120),
-            
-            marginBottom: scaleVertical(40),
-            height: scaleVertical(44),
-          }}
-          backgroundColor="#EA4265"
-          title="Run Code"
-          underlayColor = "transparent"
-          textStyle={{  fontSize: 16  }}
-          onPress={() => {
-            this.openModal();
-            //this.props.navigation.navigate('IO');
-          }}
-        />
+      <Button
+        small
+        raised
+        buttonStyle={{
+          borderRadius: 30,
+          backgroundColor: "#EA4265",
+          height: scaleVertical(44)
+        }}
+        containerViewStyle={{
+          borderRadius: 30,
+          width: scale(120),
+
+          marginBottom: scaleVertical(20),
+          height: scaleVertical(44)
+        }}
+        backgroundColor="#EA4265"
+        title="Run Code"
+        underlayColor="transparent"
+        textStyle={{ fontSize: 16 }}
+        onPress={() => {
+          this.openModal();
+          console.log(this.state.expectedOutput);
+          //this.props.navigation.navigate('IO');
+        }}
+      />
     );
 
     let modal = this.state.modalIdentifier != "picker" ? loader : imageCrop;
 
-    let fabButton =
-    this.state.runButton && this.state.userInput && this.state.expectedOutput ? fab : false;
+    let fabButton = this.state.runButton && this.state.userInput ? fab : false;
 
     return (
       <View style={styles.container}>
-      
         <View style={{ flex: 1, flexDirection: "column" }}>
-        <Card title='User Input'>
-        <TextInput multiline
-        underlineColorAndroid='transparent'
-        value={this.state.userInput}
-        style={{
-    
-         height: scale(80),
-          margin: scale(10),
-          padding: scale(10),
-          borderColor: "#b2bec3",
-          borderWidth: 1,
-          textAlignVertical: 'top'
-        
-      }}
-      onChangeText={(value)=>{
-        this.setState({userInput: value})
-      }}
-      ></TextInput>
-
-        </Card>
+          <Card title="User Input">
+            <TextInput
+              multiline
+              underlineColorAndroid="transparent"
+              value={this.state.userInput}
+              style={{
+                height: scale(80),
+                margin: scale(5),
+                padding: scale(5),
+                borderColor: "#b2bec3",
+                borderWidth: 1,
+                textAlignVertical: "top"
+              }}
+              onChangeText={value => {
+                this.setState({ userInput: value });
+              }}
+            />
+          </Card>
+          <View style={{ height: 30, backgroundColor: "transparent" }} />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              maxHeight: 25
+            }}
+          >
+            {/*
+            <RkChoice
+              style={{
+                borderColor: "black",
+                borderWidth: 2,
+                borderRadius: 5,
+                marginLeft: "5%"
+              }}
+              selected={this.state.checked}
+              contentStyle={{
+                width: 10,
+                height: 10
+              }}
+              rkType="checkbox"
+            />*/}
+            <CheckBox
+              style={{ marginLeft: "5%" }}
+              value={this.state.checked}
+              onChange={() => {
+                let check = this.state.checked;
+                this.setState({ checked: !check });
+              }}
+            />
+            <Text style={{ marginLeft: 10, marginTop: 4 }}>
+              {" "}
+              Enter Expected Output
+            </Text>
+          </View>
         </View>
-        
-        
 
         <Modal
           isVisible={this.state.modalVisible}
@@ -288,34 +356,9 @@ export default class IO extends React.Component {
             <View style={styles.modalInnerContainer}>{modal}</View>
           </View>
         </Modal>
-
-        <View style={{ flex: 1, flexDirection: "column" }}>
-          
-            <Card title='Expected Output'>
-            <TextInput multiline
-            
-            
-            underlineColorAndroid='transparent'
-            value={this.state.expectedOutput}
-        style={{
-    
-         height: scale(80),
-          margin: scale(10),
-          padding: scale(10),
-          borderColor: "#b2bec3",
-          borderWidth: 1,
-          textAlignVertical: 'top'
-        
-      }}
-      onChangeText={(value)=>{
-        this.setState({expectedOutput: value})
-      }}
-      ></TextInput>
-
-            </Card>
-      </View>
-      <View style={{justifyContent: 'center',alignItems:'center'}}>
-        {fabButton}
+        {expectedOutputInput}
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          {fabButton}
         </View>
       </View>
     );

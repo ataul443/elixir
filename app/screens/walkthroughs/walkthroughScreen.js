@@ -29,7 +29,6 @@ export default class WalkthroughScreen extends React.Component {
     this.setState({index})
   }
   componentDidMount(){
-    StatusBar.setHidden(true, 'none');
   }
 
   _toHome = async ()=>{

@@ -18,32 +18,36 @@ export class DoughnutChart extends RkComponent {
     let status = this.props.status;
     let colors = null;
     let statusCode = "CE";
-    console.log(status,"dougnut status")
-    switch(status){
-      case 'CE':
-      status = 'Compilation Errors';
-      colors = RkTheme.current.colors.charts.doughnut[0];
-      break;
+    console.log(status, "dougnut status");
+    switch (status) {
+      case "CE":
+        status = "Compilation Errors";
+        colors = RkTheme.current.colors.charts.doughnut[0];
+        break;
 
-      case 'AC':
-      statusCode = 'AC'
-      status = 'Accepted Answer';
-      colors = RkTheme.current.colors.charts.doughnut[2];
-      break;
+      case "AC":
+        statusCode = "AC";
+        status = "Accepted Answer";
+        colors = RkTheme.current.colors.charts.doughnut[2];
+        break;
 
-      case 'TLE':
-      statusCode = 'TLE'
-      status = 'Time Limit Exceeded';
-      colors = RkTheme.current.colors.charts.doughnut[1];
-      break;
+      case "TLE":
+        statusCode = "TLE";
+        status = "Time Limit Exceeded";
+        colors = RkTheme.current.colors.charts.doughnut[1];
+        break;
 
-      case 'WA':
-      statusCode = 'WA'
-      status = 'Wrong Answer';
-      colors = RkTheme.current.colors.charts.doughnut[3];
-      break;
-      
-      
+      case "WA":
+        statusCode = "WA";
+        status = "Wrong Answer";
+        colors = RkTheme.current.colors.charts.doughnut[3];
+        break;
+
+      case "MLE":
+        statusCode = "MLE";
+        status = "Memory Limit Exceeded";
+        colors = RkTheme.current.colors.charts.doughnut[1];
+        break;
     }
     this.size = 300;
     this.fontSize = 40;
@@ -56,7 +60,7 @@ export class DoughnutChart extends RkComponent {
           y: 240,
           title: "24%",
           name: status,
-          color: colors,
+          color: colors
         }
         /** 
         {

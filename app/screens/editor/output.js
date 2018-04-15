@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, ScrollView, Dimensions,Text } from "react-native";
+import { View, Image, ScrollView, Dimensions, Text } from "react-native";
 
 import { RkText, RkStyleSheet, RkTheme } from "react-native-ui-kitten";
 
@@ -16,15 +16,16 @@ import {
 export default class Output extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      title: "Output".toUpperCase(),
+      title: "Output".toUpperCase()
     };
   };
 
   constructor(props) {
     super(props);
     let respBody = null;
-    if(this.props.navigation.state.params) respBody = this.props.navigation.state.params.codeResponse;
-    else respBody = {"true": true}
+    if (this.props.navigation.state.params)
+      respBody = this.props.navigation.state.params.codeResponse;
+    else respBody = { true: true };
     console.log(respBody);
     this.status = "CE";
     this.error = null;
@@ -32,7 +33,7 @@ export default class Output extends React.Component {
     if (respBody.compile_status == "OK") {
       this.status = respBody.run_status.status;
       this.output = respBody.run_status.output;
-    }else{
+    } else {
       this.error = respBody.error;
     }
     this.data = {
@@ -68,32 +69,73 @@ export default class Output extends React.Component {
       }
     ];
     let errors = [];
-    if(this.error!= null && this.error.length > 0){
+    if (this.error != null && this.error.length > 0) {
       this.error.forEach(element => {
-        console.log(element)
-        errors.push(<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10,color:RkTheme.current.colors.charts.doughnut[3]}}>{element}</Text>);
-      })
+        console.log(element);
+        errors.push(
+          <Text
+            style={{
+              fontFamily: RkTheme.current.fonts.family.regular,
+              padding: 10,
+              color: RkTheme.current.colors.charts.doughnut[3]
+            }}
+          >
+            {element}
+          </Text>
+        );
+      });
     }
 
-    let outputCode = (<Text style={{fontFamily: RkTheme.current.fonts.family.regular, padding: 10}}>{this.output}</Text>)
+    let outputCode = (
+      <Text
+        style={{
+          fontFamily: RkTheme.current.fonts.family.regular,
+          padding: 10
+        }}
+      >
+        {this.output}
+      </Text>
+    );
 
-    let outputView = (<View style={chartBlockStyles}>
-        
-      <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Your Output: </Text>
-      {outputCode}
-      </View>)
-    let errorView = (<View style={chartBlockStyles}>
-        
-      <Text style={{fontFamily: RkTheme.current.fonts.family.bold, paddingBottom: 20}}>Error: </Text>
-      {errors}
-      </View>)
+    let outputView = (
+      <View style={chartBlockStyles}>
+        <Text
+          style={{
+            fontFamily: RkTheme.current.fonts.family.bold,
+            paddingBottom: 20
+          }}
+        >
+          Your Output:{" "}
+        </Text>
+        {outputCode}
+      </View>
+    );
+    let errorView = (
+      <View style={chartBlockStyles}>
+        <Text
+          style={{
+            fontFamily: RkTheme.current.fonts.family.bold,
+            paddingBottom: 20
+          }}
+        >
+          Error:{" "}
+        </Text>
+        {errors}
+      </View>
+    );
+
+    let chart = (
+      <View style={chartBlockStyles}>
+        <DoughnutChart status={this.status} />
+      </View>
+    );
+
+    if (this.status == "WA" || this.status == "AC") chart = false;
     return (
       <ScrollView style={styles.screen}>
-        <View style={chartBlockStyles}>
-          <DoughnutChart status={this.status}/>
-        </View>
-        {this.error? (errorView): false}
-        {this.output? (outputView): false}
+        {chart}
+        {this.error ? errorView : false}
+        {this.output ? outputView : false}
       </ScrollView>
     );
   }

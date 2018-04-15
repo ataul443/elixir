@@ -1,73 +1,69 @@
-import {
-  StatusBar,
-  StyleSheet
-} from 'react-native';
-import {RkTheme} from 'react-native-ui-kitten';
-import {KittenTheme} from './theme';
-import {AvatarTypes} from '../components/avatar/types';
-import {GradientButtonTypes} from '../components/gradientButton/types';
-import {SwitchTypes} from '../components/switch/types';
-import {SocialBarTypes} from '../components/socialBar/types';
-import {scale, scaleModerate, scaleVertical} from '../utils/scale';
+import { StatusBar, StyleSheet } from "react-native";
+import { RkTheme } from "react-native-ui-kitten";
+import { KittenTheme } from "./theme";
+import { AvatarTypes } from "../components/avatar/types";
+import { GradientButtonTypes } from "../components/gradientButton/types";
+import { SwitchTypes } from "../components/switch/types";
+import { SocialBarTypes } from "../components/socialBar/types";
+import { scale, scaleModerate, scaleVertical } from "../utils/scale";
 
 export let bootstrap = () => {
-
   RkTheme.setTheme(KittenTheme, null);
 
   /*
    RkText types
    */
 
-  RkTheme.setType('RkText', 'basic', {
+  RkTheme.setType("RkText", "basic", {
     fontFamily: theme => theme.fonts.family.bold,
-    backgroundColor: 'transparent'
+    backgroundColor: "transparent"
   });
 
-  RkTheme.setType('RkText', 'regular', {
-    fontFamily: theme => theme.fonts.family.regular,
+  RkTheme.setType("RkText", "regular", {
+    fontFamily: theme => theme.fonts.family.regular
   });
 
-  RkTheme.setType('RkText', 'light', {
-    fontFamily: theme => theme.fonts.family.light,
+  RkTheme.setType("RkText", "light", {
+    fontFamily: theme => theme.fonts.family.light
   });
 
-  RkTheme.setType('RkText', 'logo', {
-    fontFamily: theme => theme.fonts.family.logo,
+  RkTheme.setType("RkText", "logo", {
+    fontFamily: theme => theme.fonts.family.logo
   });
 
-  RkTheme.setType('RkText', 'moon', {
-    fontFamily: 'icomoon',
+  RkTheme.setType("RkText", "moon", {
+    fontFamily: "icomoon"
   });
 
-  RkTheme.setType('RkText', 'awesome', {
-    fontFamily: 'fontawesome',
+  RkTheme.setType("RkText", "awesome", {
+    fontFamily: "fontawesome"
   });
 
-  RkTheme.setType('RkText', 'hero', {
+  RkTheme.setType("RkText", "hero", {
     fontSize: scale(33)
   });
 
-  RkTheme.setType('RkText', 'menuIcon', {
+  RkTheme.setType("RkText", "menuIcon", {
     fontSize: 44
   });
 
   //all font sizes
   for (let key in RkTheme.current.fonts.sizes) {
-    RkTheme.setType('RkText', key, {
+    RkTheme.setType("RkText", key, {
       fontSize: theme => theme.fonts.sizes[key]
     });
   }
 
   //all text colors
   for (let key in RkTheme.current.colors.text) {
-    RkTheme.setType('RkText', `${key}Color`, {
+    RkTheme.setType("RkText", `${key}Color`, {
       color: theme => theme.colors.text[key]
     });
   }
 
   //all text line heights
   for (let key in RkTheme.current.fonts.lineHeights) {
-    RkTheme.setType('RkText', `${key}Line`, {
+    RkTheme.setType("RkText", `${key}Line`, {
       text: {
         lineHeight: theme => theme.fonts.lineHeights[key]
       }
@@ -75,122 +71,122 @@ export let bootstrap = () => {
   }
 
   //theme text styles
-  RkTheme.setType('RkText', 'header1', {
+  RkTheme.setType("RkText", "header1", {
     fontSize: theme => theme.fonts.sizes.h1,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'header2', {
+  RkTheme.setType("RkText", "header2", {
     fontSize: theme => theme.fonts.sizes.h2,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'header3', {
+  RkTheme.setType("RkText", "header3", {
     fontSize: theme => theme.fonts.sizes.h3,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'header4', {
+  RkTheme.setType("RkText", "header4", {
     fontSize: theme => theme.fonts.sizes.h4,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'header5', {
+  RkTheme.setType("RkText", "header5", {
     fontSize: theme => theme.fonts.sizes.h5,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'header6', {
+  RkTheme.setType("RkText", "header6", {
     fontSize: theme => theme.fonts.sizes.h6,
     fontFamily: theme => theme.fonts.family.bold
   });
-  RkTheme.setType('RkText', 'secondary1', {
+  RkTheme.setType("RkText", "secondary1", {
     fontSize: theme => theme.fonts.sizes.s1,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'secondary2', {
+  RkTheme.setType("RkText", "secondary2", {
     fontSize: theme => theme.fonts.sizes.s2,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'secondary3', {
+  RkTheme.setType("RkText", "secondary3", {
     fontSize: theme => theme.fonts.sizes.s3,
     fontFamily: theme => theme.fonts.family.regular
   });
-  RkTheme.setType('RkText', 'secondary4', {
+  RkTheme.setType("RkText", "secondary4", {
     fontSize: theme => theme.fonts.sizes.s4,
     fontFamily: theme => theme.fonts.family.regular
   });
-  RkTheme.setType('RkText', 'secondary5', {
+  RkTheme.setType("RkText", "secondary5", {
     fontSize: theme => theme.fonts.sizes.s5,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'secondary6', {
+  RkTheme.setType("RkText", "secondary6", {
     fontSize: theme => theme.fonts.sizes.s6,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'secondary7', {
+  RkTheme.setType("RkText", "secondary7", {
     fontSize: theme => theme.fonts.sizes.s7,
     fontFamily: theme => theme.fonts.family.regular
   });
-  RkTheme.setType('RkText', 'primary1', {
+  RkTheme.setType("RkText", "primary1", {
     fontSize: theme => theme.fonts.sizes.p1,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'primary2', {
+  RkTheme.setType("RkText", "primary2", {
     fontSize: theme => theme.fonts.sizes.p2,
     fontFamily: theme => theme.fonts.family.regular
   });
-  RkTheme.setType('RkText', 'primary3', {
+  RkTheme.setType("RkText", "primary3", {
     fontSize: theme => theme.fonts.sizes.p3,
     fontFamily: theme => theme.fonts.family.light
   });
-  RkTheme.setType('RkText', 'primary4', {
+  RkTheme.setType("RkText", "primary4", {
     fontSize: theme => theme.fonts.sizes.p4,
     fontFamily: theme => theme.fonts.family.regular
   });
 
-  RkTheme.setType('RkText', 'center', {
+  RkTheme.setType("RkText", "center", {
     text: {
-      textAlign: 'center'
+      textAlign: "center"
     }
   });
 
-  RkTheme.setType('RkText', 'chat', {
+  RkTheme.setType("RkText", "chat", {
     color: theme => theme.colors.chat.text
   });
   /*
    RkButton types
    */
 
-  RkTheme.setType('RkButton', 'basic', {
+  RkTheme.setType("RkButton", "basic", {
     container: {
-      alignSelf: 'auto',
+      alignSelf: "auto"
     }
   });
 
-  RkTheme.setType('RkButton', 'square', {
+  RkTheme.setType("RkButton", "square", {
     borderRadius: 3,
     backgroundColor: theme => theme.colors.button.back,
     container: {
-      flexDirection: 'column',
+      flexDirection: "column",
       margin: 8
-    },
-  });
-
-  RkTheme.setType('RkButton', 'tile', {
-    borderRadius: 0,
-    backgroundColor: 'transparent',
-    borderWidth: 0.5,
-    borderColor: theme => theme.colors.border.base,
-    container: {
-      flexDirection: 'column'
     }
   });
 
-  RkTheme.setType('RkButton', 'link', {
-    color: theme => theme.colors.primary,
+  RkTheme.setType("RkButton", "tile", {
+    borderRadius: 0,
+    backgroundColor: "transparent",
+    borderWidth: 0.5,
+    borderColor: theme => theme.colors.border.base,
+    container: {
+      flexDirection: "column"
+    }
   });
 
-  RkTheme.setType('RkButton', 'contrast', {
-    color: theme => theme.colors.text.base,
+  RkTheme.setType("RkButton", "link", {
+    color: theme => theme.colors.primary
   });
 
-  RkTheme.setType('RkButton', 'icon', {
+  RkTheme.setType("RkButton", "contrast", {
+    color: theme => theme.colors.text.base
+  });
+
+  RkTheme.setType("RkButton", "icon", {
     height: scale(56),
     width: scale(56),
     borderColor: theme => theme.colors.border.base,
@@ -198,11 +194,11 @@ export let bootstrap = () => {
     borderWidth: 1
   });
 
-  RkTheme.setType('RkButton', 'highlight', {
+  RkTheme.setType("RkButton", "highlight", {
     backgroundColor: theme => theme.colors.button.highlight
   });
 
-  RkTheme.setType('RkButton', 'social', {
+  RkTheme.setType("RkButton", "social", {
     height: scale(62),
     width: scale(62),
     borderRadius: scale(31),
@@ -214,9 +210,9 @@ export let bootstrap = () => {
    RkModalImg types
    */
 
-  RkTheme.setType('RkModalImg', 'basic', {
+  RkTheme.setType("RkModalImg", "basic", {
     img: {
-      margin: 1.5,
+      margin: 1.5
     },
     modal: {
       backgroundColor: theme => theme.colors.screen.base
@@ -228,24 +224,24 @@ export let bootstrap = () => {
     header: {
       backgroundColor: theme => theme.colors.screen.base,
       paddingBottom: 6
-    },
+    }
   });
 
   /*
    RkTextInput
    */
 
-  RkTheme.setType('RkTextInput', 'basic', {
+  RkTheme.setType("RkTextInput", "basic", {
     input: {
       fontFamily: theme => theme.fonts.family.bold
     },
     color: theme => theme.colors.text.base,
     backgroundColor: theme => theme.colors.control.background,
     labelColor: theme => theme.colors.input.label,
-    placeholderTextColor: theme => theme.colors.input.placeholder,
+    placeholderTextColor: theme => theme.colors.input.placeholder
   });
 
-  RkTheme.setType('RkTextInput', 'rounded', {
+  RkTheme.setType("RkTextInput", "rounded", {
     fontSize: theme => theme.fonts.sizes.h6,
     borderWidth: 1,
     underlineWidth: 1,
@@ -254,30 +250,29 @@ export let bootstrap = () => {
       marginVertical: {
         ios: scaleVertical(15),
         android: scaleVertical(4)
-      },
-    },
+      }
+    }
   });
 
-
-  RkTheme.setType('RkTextInput', 'right', {
+  RkTheme.setType("RkTextInput", "right", {
     input: {
-      textAlign: 'right',
+      textAlign: "right",
       marginTop: {
         ios: scaleVertical(18),
         android: scaleVertical(11)
       }
     },
     label: {
-      fontFamily: theme => theme.fonts.family.light,
+      fontFamily: theme => theme.fonts.family.light
     },
     container: {
       marginVertical: 4
     },
-    backgroundColor: 'transparent',
-    labelFontSize: theme => theme.fonts.sizes.small,
+    backgroundColor: "transparent",
+    labelFontSize: theme => theme.fonts.sizes.small
   });
 
-  RkTheme.setType('RkTextInput', 'row', {
+  RkTheme.setType("RkTextInput", "row", {
     input: {
       marginVertical: 0,
       marginHorizontal: 0,
@@ -287,10 +282,10 @@ export let bootstrap = () => {
         android: 0
       },
       paddingBottom: 0,
-      textAlignVertical: 'center',
+      textAlignVertical: "center",
       includeFontPadding: false,
       fontFamily: theme => theme.fonts.family.light,
-      fontSize: theme => theme.fonts.sizes.small,
+      fontSize: theme => theme.fonts.sizes.small
     },
     container: {
       flex: 1,
@@ -298,30 +293,29 @@ export let bootstrap = () => {
       marginVertical: 0,
       borderRadius: 20,
       paddingHorizontal: 16
-    },
-
+    }
   });
 
-  RkTheme.setType('RkTextInput', 'iconRight', {
+  RkTheme.setType("RkTextInput", "iconRight", {
     label: {
-      position: 'absolute',
+      position: "absolute",
       right: 0
     },
     input: {
       marginRight: scale(46)
-    },
+    }
   });
 
-  RkTheme.setType('RkTextInput', 'sticker', {
+  RkTheme.setType("RkTextInput", "sticker", {
     input: {
       marginHorizontal: 14
     },
     container: {
-      justifyContent: 'center',
+      justifyContent: "center",
       paddingHorizontal: 0
     },
     label: {
-      position: 'absolute',
+      position: "absolute",
       right: 0
     }
   });
@@ -330,13 +324,13 @@ export let bootstrap = () => {
    RkCard types
    */
 
-  RkTheme.setType('RkCard', 'basic', {
+  RkTheme.setType("RkCard", "basic", {
     container: {
       borderRadius: 3,
       backgroundColor: theme => theme.colors.control.background
     },
     header: {
-      justifyContent: 'flex-start',
+      justifyContent: "flex-start",
       paddingVertical: 14
     },
     content: {
@@ -349,7 +343,7 @@ export let bootstrap = () => {
     }
   });
 
-  RkTheme.setType('RkCard', 'backImg', {
+  RkTheme.setType("RkCard", "backImg", {
     container: {
       borderWidth: 0,
       borderRadius: 0
@@ -359,7 +353,7 @@ export let bootstrap = () => {
     },
     imgOverlay: {
       height: 225,
-      backgroundColor: 'transparent'
+      backgroundColor: "transparent"
     },
     content: {
       paddingHorizontal: 14
@@ -372,8 +366,7 @@ export let bootstrap = () => {
     }
   });
 
-
-  RkTheme.setType('RkCard', 'imgBlock', {
+  RkTheme.setType("RkCard", "imgBlock", {
     img: {
       height: 235
     },
@@ -383,7 +376,7 @@ export let bootstrap = () => {
       paddingHorizontal: 16
     },
     imgOverlay: {
-      height: -1,
+      height: -1
     },
     footer: {
       paddingTop: 18,
@@ -393,13 +386,13 @@ export let bootstrap = () => {
     }
   });
 
-  RkTheme.setType('RkCard', 'horizontal', {
+  RkTheme.setType("RkCard", "horizontal", {
     container: {
-      flexDirection: 'row',
+      flexDirection: "row",
       height: 110
     },
     content: {
-      flex: 1,
+      flex: 1
     },
     img: {
       height: null,
@@ -408,11 +401,11 @@ export let bootstrap = () => {
     }
   });
 
-  RkTheme.setType('RkCard', 'blog', {
+  RkTheme.setType("RkCard", "blog", {
     header: {
       paddingHorizontal: 16,
       paddingVertical: 0,
-      paddingTop: 16,
+      paddingTop: 16
     },
     content: {
       padding: 0,
@@ -423,20 +416,20 @@ export let bootstrap = () => {
       paddingHorizontal: 16,
       paddingTop: 15,
       paddingBottom: 16,
-      alignItems: 'center'
+      alignItems: "center"
     }
   });
 
-  RkTheme.setType('RkCard', 'article', {
+  RkTheme.setType("RkCard", "article", {
     container: {
       borderWidth: 0,
-      backgroundColor: 'transparent'
+      backgroundColor: "transparent"
     },
     header: {
       paddingVertical: 0,
       paddingTop: 20,
       paddingBottom: 16,
-      justifyContent: 'space-between',
+      justifyContent: "space-between",
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderColor: theme => theme.colors.border.base
     },
@@ -449,47 +442,47 @@ export let bootstrap = () => {
       paddingHorizontal: 14,
       paddingTop: 15,
       paddingBottom: 16,
-      alignItems: 'center'
+      alignItems: "center"
     }
   });
 
-  RkTheme.setType('RkCard', 'credit', {
+  RkTheme.setType("RkCard", "credit", {
     container: {
       borderWidth: 0,
       borderRadius: 7
     },
     header: {
-      justifyContent: 'space-between',
+      justifyContent: "space-between",
       paddingHorizontal: 14,
-      alignItems: 'center',
+      alignItems: "center",
       paddingBottom: scaleVertical(46)
     },
     content: {
-      alignItems: 'center',
+      alignItems: "center",
       paddingVertical: 0
     },
     footer: {
       paddingBottom: scaleVertical(14),
       paddingTop: scaleVertical(16),
       paddingHorizontal: 14,
-      alignItems: 'flex-end'
+      alignItems: "flex-end"
     }
   });
 
-  RkTheme.setType('RkPicker', 'highlight', {
+  RkTheme.setType("RkPicker", "highlight", {
     highlightBorderTopColor: theme => theme.colors.border.highlight,
     highlightBorderBottomColor: theme => theme.colors.border.highlight,
-    windowBorderColor: theme => theme.colors.border.highlight,
+    windowBorderColor: theme => theme.colors.border.highlight
   });
 
   /*
    Register components
    */
 
-  RkTheme.registerComponent('Avatar', AvatarTypes);
-  RkTheme.registerComponent('GradientButton', GradientButtonTypes);
-  RkTheme.registerComponent('RkSwitch', SwitchTypes);
-  RkTheme.registerComponent('SocialBar', SocialBarTypes);
+  RkTheme.registerComponent("Avatar", AvatarTypes);
+  RkTheme.registerComponent("GradientButton", GradientButtonTypes);
+  RkTheme.registerComponent("RkSwitch", SwitchTypes);
+  RkTheme.registerComponent("SocialBar", SocialBarTypes);
 
-  StatusBar.setBarStyle('dark-content', true);
+  StatusBar.setBarStyle("dark-content", true);
 };

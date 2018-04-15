@@ -1,6 +1,6 @@
 import React from "react";
 import { DrawerNavigator, StackNavigator } from "react-navigation";
-import { withRkTheme,RkTheme} from "react-native-ui-kitten";
+import { withRkTheme, RkTheme } from "react-native-ui-kitten";
 import { AppRoutes } from "./config/navigation/routesBuilder";
 import * as Screens from "./screens";
 import { bootstrap } from "./config/bootstrap";
@@ -11,13 +11,12 @@ import { View } from "react-native";
 import IOSCreen from "./screens/editor/io";
 import OutputScreen from "./screens/editor/output";
 import { NavBar } from "./components/index";
-import {DarkKittenTheme} from './config/darkTheme';
-import {KittenTheme} from './config/theme';
-import {StatusBar,Platform} from 'react-native';
-import Walkthrough from './screens/walkthroughs/walkthroughScreen';
+import { DarkKittenTheme } from "./config/darkTheme";
+import { KittenTheme } from "./config/theme";
+import { StatusBar, Platform } from "react-native";
+import Walkthrough from "./screens/walkthroughs/walkthroughScreen";
 
 let ThemedNavigationBar = withRkTheme(NavBar);
-
 
 bootstrap();
 data.populateData();
@@ -32,46 +31,45 @@ function getCurrentRouteName(navigationState) {
   }
   return route.routeName;
 }
-const IONavigator = StackNavigator({
-  
-  
-  IOScreen: {
-    screen: IOSCreen
+const IONavigator = StackNavigator(
+  {
+    IOScreen: {
+      screen: IOSCreen
+    },
+    Output: {
+      screen: OutputScreen
+    }
   },
-  Output: {
-    screen: OutputScreen
-  },
- 
-},{
-  headerMode: 'screen',
-  cardStyle: { backgroundColor: "transparent" },
-      
-      navigationOptions: ({ navigation, screenProps }) => ({
-        gesturesEnabled: false,
-        header: headerProps => {
-          return (
-            <ThemedNavigationBar
-              navigation={navigation}
-              headerProps={headerProps}
-            />
-          );
-        }
-      })
-});
+  {
+    headerMode: "screen",
+    cardStyle: { backgroundColor: "transparent" },
+
+    navigationOptions: ({ navigation, screenProps }) => ({
+      gesturesEnabled: false,
+      header: headerProps => {
+        return (
+          <ThemedNavigationBar
+            navigation={navigation}
+            headerProps={headerProps}
+          />
+        );
+      }
+    })
+  }
+);
 let SideMenu = withRkTheme(Screens.SideMenu);
 const KittenApp = StackNavigator(
   {
     First: {
       screen: Screens.SplashScreen
     },
-    Auth:{
-      screen: Screens.LoginV2,
+    Auth: {
+      screen: Screens.LoginV2
     },
     Walkthrough: {
       screen: Walkthrough
     },
-   
-    
+
     Home: {
       screen: DrawerNavigator(
         {
@@ -82,20 +80,24 @@ const KittenApp = StackNavigator(
           drawerCloseRoute: "DrawerClose",
           drawerToggleRoute: "DrawerToggle",
           contentComponent: props => {
-            return(
-            <View style={{backgroundColor:DarkKittenTheme.colors.screen.base,flex:1}}>
-              <SideMenu {...props} parentProps={props} />
-            </View>)
+            return (
+              <View
+                style={{
+                  backgroundColor: DarkKittenTheme.colors.screen.base,
+                  flex: 1
+                }}
+              >
+                <SideMenu {...props} parentProps={props} />
+              </View>
+            );
           }
         }
       )
     },
     IO: {
       screen: IONavigator
-    },
-  
-  
-},
+    }
+  },
   {
     headerMode: "none"
   }
@@ -130,7 +132,7 @@ export default class App extends React.Component {
     if (!this.state.loaded) {
       return <AppLoading />;
     }
-    
+
     return (
       <View style={{ flex: 1 }}>
         <KittenApp
@@ -138,8 +140,9 @@ export default class App extends React.Component {
             const currentScreen = getCurrentRouteName(currentState);
             const prevScreen = getCurrentRouteName(prevState);
             RkTheme.setTheme(DarkKittenTheme);
-              StatusBar.setBarStyle('light-content', true);
-              Platform.OS == 'android' && StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
+            StatusBar.setBarStyle("light-content", true);
+            Platform.OS == "android" &&
+              StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
             if (prevScreen !== currentScreen) {
               track(currentScreen);
             }

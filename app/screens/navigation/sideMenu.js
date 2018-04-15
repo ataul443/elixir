@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   TouchableHighlight,
   View,
@@ -7,31 +7,26 @@ import {
   Platform,
   StyleSheet,
   AsyncStorage
-} from 'react-native';
-import {NavigationActions} from 'react-navigation';
-import {
-  RkStyleSheet,
-  RkText,
-  RkTheme
-} from 'react-native-ui-kitten';
-import {SideRoutes} from '../../config/navigation/routes';
-import {FontAwesome} from '../../assets/icons';
+} from "react-native";
+import { NavigationActions } from "react-navigation";
+import { RkStyleSheet, RkText, RkTheme } from "react-native-ui-kitten";
+import { SideRoutes } from "../../config/navigation/routes";
+import { FontAwesome } from "../../assets/icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export class SideMenu extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
-      profileIcon : null,
+      profileIcon: null,
       user: null
-    }
-    
+    };
+
     this._navigateAction = this._navigate.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this._loadProfileIcon();
-    
   }
 
   _navigate(route) {
@@ -43,33 +38,56 @@ export class SideMenu extends React.Component {
       ]
     });
     */
-   let navigateAction = NavigationActions.navigate({
-     routeName: route.id,
-     params: {},
-   })
-    this.props.navigation.dispatch(navigateAction)
+    let navigateAction = NavigationActions.navigate({
+      routeName: route.id,
+      params: {}
+    });
+    this.props.navigation.dispatch(navigateAction);
   }
 
-  async _loadProfileIcon(){
-    const user = await AsyncStorage.getItem('@AuthStore:user');
+  async _loadProfileIcon() {
+    const user = await AsyncStorage.getItem("@AuthStore:user");
     user1 = JSON.parse(user);
-    this.setState({user: user1});
+    this.setState({ user: user1 });
     let url = user1.photoUrl;
-    this.setState({profileIcon: url})
+    this.setState({ profileIcon: url });
     console.log(this.state.user);
     return url;
   }
 
-  _renderIcon() {
-    if(this.state.profileIcon){
-      if (RkTheme.current.name === 'light')
-      return <Image style={styles.icon} source={{uri: this.state.profileIcon}}/>;
-    return <Image style={styles.icon} source={{uri: this.state.profileIcon}}/>
-    }else{
+  _logout = async () => {
+    await AsyncStorage.removeItem("@AuthStore:user");
+    let resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [NavigationActions.navigate({ routeName: "Auth" })]
+    });
+    this.props.navigation.dispatch(resetAction);
+  };
 
-    if (RkTheme.current.name === 'light')
-      return <Image style={styles.icon} source={require('../../assets/images/logo.png')}/>;
-    return <Image style={styles.icon} source={require('../../assets/images/smallLogoDark.png')}/>
+  _renderIcon() {
+    if (this.state.profileIcon) {
+      if (RkTheme.current.name === "light")
+        return (
+          <Image style={styles.icon} source={{ uri: this.state.profileIcon }} />
+        );
+      return (
+        <Image style={styles.icon} source={{ uri: this.state.profileIcon }} />
+      );
+    } else {
+      if (RkTheme.current.name === "light")
+        return (
+          <Image
+            style={styles.icon}
+            source={require("../../assets/images/logo.png")}
+          />
+        );
+      return (
+        <Image
+          style={styles.icon}
+          source={require("../../assets/images/smallLogoDark.png")}
+        />
+      );
     }
   }
 
@@ -81,36 +99,59 @@ export class SideMenu extends React.Component {
           key={route.id}
           underlayColor={RkTheme.current.colors.button.underlay}
           activeOpacity={1}
-          onPress={() => this._navigate(route)}>
+          onPress={() => this._navigate(route)}
+        >
           <View style={styles.content}>
             <View style={styles.content}>
-              <RkText style={styles.icon}
-                      rkType='moon primary xlarge'>{route.icon}</RkText>
+              <RkText style={styles.icon} rkType="moon primary xlarge">
+                {route.icon}
+              </RkText>
               <RkText>{route.title}</RkText>
             </View>
-            <RkText rkType='awesome secondaryColor small'>{FontAwesome.chevronRight}</RkText>
+            <RkText rkType="awesome secondaryColor small">
+              {FontAwesome.chevronRight}
+            </RkText>
           </View>
         </TouchableHighlight>
-      )
+      );
     });
 
     let name = null;
-    if(this.state.user) name = this.state.user.name;
-    else name = 'Elixer';
-    
+    if (this.state.user) name = this.state.user.name;
+    else name = "Elixer";
+
     return (
       <View style={styles.root}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={[styles.container, styles.content]}>
             {this._renderIcon()}
-            <RkText rkType='logo'>{name}</RkText>
-            
+            <RkText rkType="logo">{name}</RkText>
           </View>
           {menu}
+          <TouchableHighlight
+            style={styles.container}
+            key={"Logout"}
+            underlayColor={RkTheme.current.colors.button.underlay}
+            activeOpacity={1}
+            onPress={() => {
+              this._logout();
+            }}
+          >
+            <View style={styles.content}>
+              <View style={styles.content}>
+                <RkText style={styles.icon} rkType="moon primary xlarge">
+                  <MaterialCommunityIcons name="logout" size={32} />
+                </RkText>
+                <RkText>{"Logout"}</RkText>
+              </View>
+              <RkText rkType="awesome secondaryColor small">
+                {FontAwesome.chevronRight}
+              </RkText>
+            </View>
+          </TouchableHighlight>
         </ScrollView>
       </View>
-    )
+    );
   }
 }
 
@@ -122,16 +163,15 @@ let styles = RkStyleSheet.create(theme => ({
     borderColor: theme.colors.border.base
   },
   root: {
-    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: theme.colors.screen.base
   },
   content: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center"
   },
   icon: {
-
     marginRight: 13,
     marginTop: 19,
     width: 50,

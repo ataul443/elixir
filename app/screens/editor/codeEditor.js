@@ -9,7 +9,7 @@ import {
   Picker,
   TextInput,
   Keyboard,
-  AsyncStorage,
+  AsyncStorage
 } from "react-native";
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
 
@@ -34,8 +34,9 @@ export class CodeEditor extends React.Component {
     super(props);
     this.onMessage = this.onMessage.bind(this);
     let inputText = null;
-    if(props.navigation.state.params) inputText = props.navigation.state.params.textCode;
-    if (!inputText || inputText.length == 0 )
+    if (props.navigation.state.params)
+      inputText = props.navigation.state.params.textCode;
+    if (!inputText || inputText.length == 0)
       inputText = "//! NO Code Found !\n\n";
     this.state = {
       webWidth: deviceWidth,
@@ -45,42 +46,38 @@ export class CodeEditor extends React.Component {
       language: "Select",
       modalContent: "loader",
       fab: false,
-      runButton: true,
-      
+      runButton: true
     };
 
-    if(this.state.inputData == "//! NO Code Found !\n\n" ){
-      console.log(this.state.inputData, 'Checking');
-      let saveData =  this._loader(true,false);
+    if (this.state.inputData == "//! NO Code Found !\n\n") {
+      console.log(this.state.inputData, "Checking");
+      let saveData = this._loader(true, false);
       let savedData = saveData;
-      if(savedData){
+      if (savedData) {
         this.state.inputData = savedData;
-        console.log(this.state.inputData,savedData ,'Checking Save');
+        console.log(this.state.inputData, savedData, "Checking Save");
       }
     }
   }
 
-  _loader = async (load,data)=>{
+  _loader = async (load, data) => {
     let saveData = null;
-    if(load) saveData = await AsyncStorage.getItem('CodeEditorStore:saveData');
-    else await AsyncStorage.setItem('CodeEditorStore:saveData',data)
+    if (load) saveData = await AsyncStorage.getItem("CodeEditorStore:saveData");
+    else await AsyncStorage.setItem("CodeEditorStore:saveData", data);
     return saveData;
-  }
-
-
-
+  };
 
   onMessage(event) {
-    if(event.nativeEvent.data == 'INSERTED'){
-      this.setState({modalVisible: false,fab: true})
-    }else{
-    this._loader(false,event.nativeEvent.data);
-    this.setState({modalVisible: false});
-    console.log("message", event.nativeEvent.data);
-    let data = event.nativeEvent.data;
-    //"//! NO Code Found !\n//Welcome To APP"
-    if( data == null || data.length  < 0) alert("Code Not Found");
-    else this.props.navigation.navigate("IO", { code: data  });
+    if (event.nativeEvent.data == "INSERTED") {
+      this.setState({ modalVisible: false, fab: true });
+    } else {
+      this._loader(false, event.nativeEvent.data);
+      this.setState({ modalVisible: false });
+      console.log("message", event.nativeEvent.data);
+      let data = event.nativeEvent.data;
+      //"//! NO Code Found !\n//Welcome To APP"
+      if (data == null || data.length < 0) alert("Code Not Found");
+      else this.props.navigation.navigate("IO", { code: data });
     }
   }
 
@@ -102,8 +99,14 @@ export class CodeEditor extends React.Component {
 
   componentDidMount() {
     //this.onModalOpen();
-    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide); 
+    this.keyboardDidShowListener = Keyboard.addListener(
+      "keyboardDidShow",
+      this._keyboardDidShow
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      "keyboardDidHide",
+      this._keyboardDidHide
+    );
 
     let inputText = this.state.inputData;
     console.log(inputText, "Inserting Code Man");
@@ -148,22 +151,19 @@ export class CodeEditor extends React.Component {
       .catch(error => console.log(error));
   };
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
   }
 
-  _keyboardDidShow = ()=>{
-    this.setState({runButton:true})
-  }
-  _keyboardDidHide = ()=>{
-    this.setState({runButton: true});
-  }
-
-
+  _keyboardDidShow = () => {
+    this.setState({ runButton: true });
+  };
+  _keyboardDidHide = () => {
+    this.setState({ runButton: true });
+  };
 
   render() {
-
     const loader = (
       <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
         <ActivityIndicator size="large" />
@@ -194,32 +194,32 @@ export class CodeEditor extends React.Component {
         }}
       />*/
       <Button
-          small
-          raised
-          buttonStyle={{
-            borderRadius: 30,
-            backgroundColor: "#EA4265",
-            width: 60,
-            height: 60
-          }}
-          containerViewStyle={{
-            position:'absolute',
-            borderRadius: 30,
-            width: 60,
-            right: scale(30),
-            bottom: scaleVertical(60),
-            height:60,
-          }}
-          backgroundColor="#EA4265"
-          title="Run"
-          underlayColor = "transparent"
-          textStyle={{  fontSize: 16  }}
-          onPress={() => {
-            this.onModalOpen();
-            this.refs.editorWebView.postMessage("collect");
-            //this.props.navigation.navigate('IO');
-          }}
-        />
+        small
+        raised
+        buttonStyle={{
+          borderRadius: 30,
+          backgroundColor: "#EA4265",
+          width: 60,
+          height: 60
+        }}
+        containerViewStyle={{
+          position: "absolute",
+          borderRadius: 30,
+          width: 60,
+          right: scale(30),
+          bottom: scaleVertical(60),
+          height: 60
+        }}
+        backgroundColor="#EA4265"
+        title="Run"
+        underlayColor="transparent"
+        textStyle={{ fontSize: 16 }}
+        onPress={() => {
+          this.onModalOpen();
+          this.refs.editorWebView.postMessage("collect");
+          //this.props.navigation.navigate('IO');
+        }}
+      />
     );
 
     let fabButton = this.state.fab && this.state.runButton ? fab : false;
@@ -246,7 +246,10 @@ export class CodeEditor extends React.Component {
         </Modal>
         <WebView
           style={{ width: this.state.webWidth }}
-          source={require("../../assets/editor/editor.html")}
+          source={{
+            uri:
+              "http://nextvac-storage.s3-accelerate.amazonaws.com/editor/editor.html"
+          }}
           ref="editorWebView"
           //ref={ref => {
           //  this.webview = ref;
