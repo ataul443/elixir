@@ -1,7 +1,9 @@
 import React from 'react';
 import {
+  StyleSheet,
   Image,
-  View
+  View,
+  Dimensions
 } from 'react-native';
 import {
   RkText,
@@ -9,21 +11,22 @@ import {
   RkTheme
 } from 'react-native-ui-kitten';
 
-export class Walkthrough1 extends React.Component {
+export class Walkthrough3 extends React.Component {
 
   constructor(props) {
     super(props);
   }
 
   render() {
+    let {width} = Dimensions.get('window');
     let image = RkTheme.current.name === 'light'
-      ? <Image style={{width: 200,height: 400, resizeMode: 'cover'}} source={require('../../assets/images/1.png')}/>
-      : <Image source={require('../../assets/images/1.png')}/>;
+      ? <Image style={{width: 200,height: 420, resizeMode: 'cover'}} source={require('../../assets/images/3.png')}/>
+      : <Image style={{width: 200,height: 400, resizeMode: 'cover'}} source={require('../../assets/images/3.png')}/>;
 
     return (
       <View style={styles.screen}>
         {image}
-        <RkText rkType='header2' style={styles.text}>Scan your QR Code</RkText>
+        <RkText rkType='header2' style={styles.text}>Upload and Compile</RkText>
       </View>
     )
   }
@@ -37,6 +40,8 @@ let styles = RkStyleSheet.create(theme => ({
     flex: 1
   },
   text: {
-    marginTop: 20
+    textAlign: 'center',
+    marginTop: 20,
+    marginHorizontal: 30
   }
 }));

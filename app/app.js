@@ -66,9 +66,10 @@ const KittenApp = StackNavigator(
     Auth: {
       screen: Screens.LoginV2
     },
-    Walkthrough: {
-      screen: Walkthrough
+    Walkthrough:{
+      screen: Walkthrough,
     },
+    
     IO: {
       screen: IONavigator
     },

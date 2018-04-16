@@ -49,7 +49,7 @@ export class SplashScreen extends React.Component {
 
       if(walkthrough === null){
         const walkthroughScreen = await AsyncStorage.setItem('@walkthrough','Walkthrough');
-        nextScreen = 'Walkthrough';
+        nextScreen = walkthrough;
       }else{
         if(user !== null){
         

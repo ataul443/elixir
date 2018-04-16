@@ -20,13 +20,13 @@ export class Walkthrough2 extends React.Component {
   render() {
     let {width} = Dimensions.get('window');
     let image = RkTheme.current.name === 'light'
-      ? <Image style={{width}} source={require('../../assets/images/screensImage.png')}/>
-      : <Image style={{width}} source={require('../../assets/images/screensImageDark.png')}/>;
+      ? <Image style={{width: 200,height: 400, resizeMode: 'cover'}} source={require('../../assets/images/2.png')}/>
+      : <Image style={{width: 200,height: 400, resizeMode: 'cover'}} source={require('../../assets/images/2.png')}/>;
 
     return (
       <View style={styles.screen}>
         {image}
-        <RkText rkType='header2' style={styles.text}>Explore different examples of frequently used pages</RkText>
+        <RkText rkType='header2' style={styles.text}>Crop It.</RkText>
       </View>
     )
   }

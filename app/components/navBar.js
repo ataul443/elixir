@@ -60,11 +60,7 @@ export class NavBar extends React.Component {
           rkType='clear'
           style={styles.menu}
           onPress={() => {
-            let toHome = NavigationActions.reset({
-              index: 0,
-              actions: [NavigationActions.navigate({routeName: 'CodeEditor'})]
-            });
-            this.props.navigation.dispatch(toHome)
+            this.props.navigation.goBack();
           }}>
           <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
         </RkButton>

@@ -33,7 +33,7 @@ export const MainRoutes = [
   {
     id: "Profile",
     title: "Profile",
-    icon: FontIcons.profile,
+    icon: <FontAwesome name="user" size={40} />,
     screen: Screens.ProfileV1,
     children: []
   }
@@ -43,14 +43,14 @@ export const SideRoutes = [
   {
     id: "Profile",
     title: "Profile",
-    icon: FontIcons.profile,
+    icon: <FontAwesome name="user" size={40} />,
     screen: Screens.ProfileV1,
     children: []
   },
   {
-    id: "Settings",
+    id:"Settings",
     title: "Settings",
-    icon: FontIcons.dashboard,
+    icon: <FontAwesome name='gear' size={40}/>,
     screen: Screens.Settings,
     children: []
   }

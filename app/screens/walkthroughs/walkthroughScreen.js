@@ -1,18 +1,14 @@
 import React from 'react';
 import {
-  View,
-  AsyncStorage,
-  StatusBar,
-  Platform
+  View
 } from 'react-native';
-import {RkStyleSheet,RkTheme} from 'react-native-ui-kitten';
+import {RkStyleSheet} from 'react-native-ui-kitten';
 import {GradientButton} from '../../components/';
 import {Walkthrough} from '../../components/walkthrough';
 import {Walkthrough1} from './walkthrough1';
 import {Walkthrough2} from './walkthrough2';
+import {Walkthrough3} from './walkthrough3';
 import {PaginationIndicator} from '../../components';
-import {DarkKittenTheme} from '../../config/darkTheme';
-import {NavigationActions} from 'react-navigation'
 
 
 export default class WalkthroughScreen extends React.Component {
@@ -28,35 +24,6 @@ export default class WalkthroughScreen extends React.Component {
   changeIndex(index) {
     this.setState({index})
   }
-  componentDidMount(){
-  }
-
-  _toHome = async ()=>{
-    const user = await AsyncStorage.getItem('@AuthStore:user')
-    let nextScreen = 'Home';
-    try{ 
-      if(user !== null){
-          
-        console.log("User Found");
-        return;
-      }else{
-        nextScreen = 'Auth';
-        console.log("User Not FOund!");
-        
-      }
-    }catch(e){
-      alert(error)
-      console.log(error);
-      
-    }
-    finally{
-      let toHome = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({routeName: nextScreen})]
-      });
-      this.props.navigation.dispatch(toHome);
-    }
-  }
 
   render() {
     return (
@@ -64,14 +31,15 @@ export default class WalkthroughScreen extends React.Component {
         <Walkthrough onChanged={(index) => this.changeIndex(index)}>
           <Walkthrough1/>
           <Walkthrough2/>
+          <Walkthrough3/>
         </Walkthrough>
-        <PaginationIndicator length={2} current={this.state.index}/>
+        <PaginationIndicator length={3} current={this.state.index}/>
         <GradientButton
           rkType='large'
           style={styles.button}
           text="GET STARTED"
           onPress={() => {
-            this._toHome();
+            this.props.navigation.navigate('Auth');
           }}/>
       </View>
     )

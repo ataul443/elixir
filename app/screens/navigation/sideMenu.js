@@ -153,7 +153,7 @@ export class SideMenu extends React.Component {
 
           <TouchableHighlight
             style={styles.container}
-            key={"Logout"}
+            key={"Share"}
             underlayColor={RkTheme.current.colors.button.underlay}
             activeOpacity={1}
             onPress={() => {
