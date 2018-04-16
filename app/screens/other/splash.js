@@ -103,9 +103,9 @@ export class SplashScreen extends React.Component {
           <Image style={[styles.image, {width}]} source={require('../../assets/images/splashBack.png')}/>
         </View>
         <ProgressBar
-          color={RkTheme.current.colors.accent}
+          color={'#1C81D7'}
           style={styles.progress}
-          progress={this.state.progress} width={scale(320)}/>
+          progress={this.state.progress} width={scale(220)}/>
       </View>
     )
   }

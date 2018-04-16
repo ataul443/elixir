@@ -69,7 +69,9 @@ const KittenApp = StackNavigator(
     Walkthrough: {
       screen: Walkthrough
     },
-
+    IO: {
+      screen: IONavigator
+    },
     Home: {
       screen: DrawerNavigator(
         {
@@ -83,7 +85,7 @@ const KittenApp = StackNavigator(
             return (
               <View
                 style={{
-                  backgroundColor: DarkKittenTheme.colors.screen.base,
+                  backgroundColor: '#fff',
                   flex: 1
                 }}
               >
@@ -93,9 +95,6 @@ const KittenApp = StackNavigator(
           }
         }
       )
-    },
-    IO: {
-      screen: IONavigator
     }
   },
   {
@@ -119,6 +118,7 @@ export default class App extends React.Component {
     await Font.loadAsync({
       fontawesome: require("./assets/fonts/fontawesome.ttf"),
       icomoon: require("./assets/fonts/icomoon.ttf"),
+      'MaterialIcons': require('@expo/vector-icons/fonts/MaterialIcons.ttf'),
       "Righteous-Regular": require("./assets/fonts/Righteous-Regular.ttf"),
       "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
       "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -139,10 +139,7 @@ export default class App extends React.Component {
           onNavigationStateChange={(prevState, currentState) => {
             const currentScreen = getCurrentRouteName(currentState);
             const prevScreen = getCurrentRouteName(prevState);
-            RkTheme.setTheme(DarkKittenTheme);
-            StatusBar.setBarStyle("light-content", true);
-            Platform.OS == "android" &&
-              StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
+            
             if (prevScreen !== currentScreen) {
               track(currentScreen);
             }

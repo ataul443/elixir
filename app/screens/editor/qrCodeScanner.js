@@ -7,16 +7,20 @@ import {
   ActivityIndicator,
   ScrollView,
   StatusBar,
-  StyleSheet
+  StyleSheet,
+  Dimensions,
 } from "react-native";
 import Expo from "expo";
 import { Permissions } from "expo";
+import {UIConstants} from '../../config/appConstants';
 
 import { RkCard, RkText, RkStyleSheet, RkButton } from "react-native-ui-kitten";
 import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 let moment = require("moment");
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
+
+const { deviceWidth, deviceHeight } = Dimensions.get("window");
 
 export class QRScanner extends React.Component {
   static navigationOptions = {
@@ -209,9 +213,9 @@ export class QRScanner extends React.Component {
           onBarCodeRead={this._handleBarCodeRead}
           barCodeTypes={[Expo.BarCodeScanner.Constants.BarCodeType.qr]}
           style={{
-            marginTop: scaleVertical(70),
-            height: scaleVertical(450),
-            width: scale(280)
+            
+            height: scaleVertical(600),
+            width: scale(350)
           }}
         />
       </View>

@@ -15,6 +15,8 @@ import Modal from "react-native-modal";
 import { Button } from "react-native-elements";
 let moment = require("moment");
 import { scale, scaleModerate, scaleVertical } from "../../utils/scale";
+import {MaterialIcons,Entypo} from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export class Scanner extends React.Component {
   static navigationOptions = {
@@ -244,15 +246,45 @@ export class Scanner extends React.Component {
       this.state.uploadImage,
       "uploade image"
     );
+
+
     const imageP = (
+      <View style={{
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+      <Text style={{fontSize: 14, marginLeft: 30,marginTop: 20, fontWeight: 'bold',  width: '100%'}}>Select Image from</Text>
       <View
         style={{
           flex: 1,
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center"
         }}
       >
+      <RkButton
+     onPress={() => {
+      this.pickerChoice = 'Camera';
+      this.setState({modalContent: 'imageCrop'});
+    }}
+      style={{backgroundColor: '#dcdde1', width: 80,height: 80, margin: 10}}>
+        <MaterialIcons  name={'camera-alt'} size={44}></MaterialIcons>
+      </RkButton>
+     
+
+        <RkButton
+        onPress={() => {
+          this.pickerChoice = 'ImageLibrary';
+          this.setState({modalContent: 'imageCrop'});
+        }} style={{backgroundColor: '#dcdde1',width: 80,height: 80, margin: 10}}>
+          <Ionicons name={'md-images'} size={44}></Ionicons>
+        </RkButton>
+      </View>
+      </View>
+    );
+     {/*
         <Button
           title="Open Camera"
           buttonStyle={{ backgroundColor: "transparent" }}
@@ -264,7 +296,7 @@ export class Scanner extends React.Component {
             this.setState({modalContent: 'imageCrop'});
           }}
         />
-
+          
         <Button
           title="Open Gallery"
           buttonStyle={{ backgroundColor: "transparent" }}
@@ -276,18 +308,48 @@ export class Scanner extends React.Component {
             this.setState({modalContent: 'imageCrop'});
           }}
         />
-      </View>
-    );
+        **/}
 
     const imageFilter = (
+      <View style={{
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+      <Text style={{fontSize: 14, marginLeft: 30,marginTop: 20, fontWeight: 'bold',  width: '100%'}}>Is Image in Black and White?</Text>
       <View
         style={{
           flex: 1,
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center"
         }}
       >
+
+      <RkButton
+      onPress={() => {
+        this._onUpload("color");
+        this.setState({
+          modalContent: "loader"
+        });
+      }}
+      style={{backgroundColor: '#dcdde1', width: 80,height: 80, margin: 10}}>
+        <MaterialIcons style={{color: 'green'}}  name={'check'} size={44}></MaterialIcons>
+      </RkButton>
+     
+
+        <RkButton
+         onPress={() => {
+          this._onUpload("b/w");
+          this.setState({
+            modalContent: "loader"
+          });
+        }}
+        style={{backgroundColor: '#dcdde1',width: 80,height: 80, margin: 10}}>
+          <Entypo style={{color: '#C62828'}} name={'cross'} size={44}></Entypo>
+        </RkButton>
+      {/*
         <Button
           title="B/W Image Upload"
           buttonStyle={{ backgroundColor: "transparent" }}
@@ -314,18 +376,49 @@ export class Scanner extends React.Component {
             });
           }}
         />
+        **/}
       </View>
+      </View>
+      
     );
 
     const imageCrop = (
+      <View style={{
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+      <Text style={{fontSize: 14, marginLeft: 30,marginTop: 20, fontWeight: 'bold',  width: '100%'}}>Select Image format</Text>
       <View
         style={{
           flex: 1,
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "center",
           alignItems: "center"
         }}
       >
+
+
+        <RkButton
+     onPress={() => {
+      this._pickImage(true,this.pickerChoice);
+    }}
+      style={{backgroundColor: '#dcdde1', width: 80,height: 80, margin: 10}}>
+        <MaterialIcons  name={'crop'} size={44}></MaterialIcons>
+      </RkButton>
+     
+
+        <RkButton
+        onPress={() => {
+          this._pickImage(false);
+        }}
+        style={{backgroundColor: '#dcdde1',width: 80,height: 80, margin: 10}}>
+          <MaterialIcons name={'image'} size={44}></MaterialIcons>
+        </RkButton>
+
+      </View>
+      {/*
         <Button
           title="Cropped Image"
           buttonStyle={{ backgroundColor: "transparent" }}
@@ -346,7 +439,14 @@ export class Scanner extends React.Component {
             this._pickImage(false);
           }}
         />
+        **/}
+
       </View>
+      
+
+      
+      
+      
     );
 
     const loader = (
@@ -469,9 +569,9 @@ let styles = RkStyleSheet.create(theme => ({
     alignItems: "center"
   },
   modalInnerContainer: {
-    width: "80%",
+    width: "70%",
     height: "25%",
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f6fa",
     
   },
   modalContent: {

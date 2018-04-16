@@ -49,15 +49,8 @@ export class CodeEditor extends React.Component {
       runButton: true
     };
 
-    if (this.state.inputData == "//! NO Code Found !\n\n") {
-      console.log(this.state.inputData, "Checking");
-      let saveData = this._loader(true, false);
-      let savedData = saveData;
-      if (savedData) {
-        this.state.inputData = savedData;
-        console.log(this.state.inputData, savedData, "Checking Save");
-      }
-    }
+    
+
   }
 
   _loader = async (load, data) => {
@@ -98,6 +91,15 @@ export class CodeEditor extends React.Component {
   };
 
   componentDidMount() {
+    if (this.state.inputData == "//! NO Code Found !\n\n") {
+      console.log(this.state.inputData, "Checking");
+      let saveData = this._loader(true, false);
+      let savedData = saveData;
+      if (savedData) {
+        this.state.inputData = savedData;
+        console.log(this.state.inputData, savedData, "Checking Save");
+      }
+    }
     //this.onModalOpen();
     this.keyboardDidShowListener = Keyboard.addListener(
       "keyboardDidShow",

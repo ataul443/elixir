@@ -59,9 +59,6 @@ export default class WalkthroughScreen extends React.Component {
   }
 
   render() {
-    RkTheme.setTheme(DarkKittenTheme);
-    StatusBar.setBarStyle('light-content', true);
-    Platform.OS == 'android' && StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
     return (
       <View style={styles.screen}>
         <Walkthrough onChanged={(index) => this.changeIndex(index)}>

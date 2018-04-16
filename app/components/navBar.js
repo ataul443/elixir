@@ -9,6 +9,7 @@ import {RkText, RkButton, RkStyleSheet} from 'react-native-ui-kitten';
 import {FontAwesome} from '../assets/icons';
 import {UIConstants} from '../config/appConstants';
 import {scale, scaleModerate, scaleVertical} from '../utils/scale';
+import {NavigationActions} from 'react-navigation';
 
 export class NavBar extends React.Component {
   constructor(props) {
@@ -59,7 +60,11 @@ export class NavBar extends React.Component {
           rkType='clear'
           style={styles.menu}
           onPress={() => {
-            this.props.navigation.goBack();
+            let toHome = NavigationActions.reset({
+              index: 0,
+              actions: [NavigationActions.navigate({routeName: 'CodeEditor'})]
+            });
+            this.props.navigation.dispatch(toHome)
           }}>
           <RkText rkType='awesome hero'>{FontAwesome.chevronLeft}</RkText>
         </RkButton>

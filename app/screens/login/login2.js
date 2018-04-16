@@ -81,10 +81,6 @@ export class LoginV2 extends React.Component {
   }
 
   render() {
-    RkTheme.setTheme(DarkKittenTheme);
-    StatusBar.setBarStyle("light-content", true);
-    Platform.OS == "android" &&
-      StatusBar.setBackgroundColor(DarkKittenTheme.colors.screen.base);
     let renderIcon = () => {
       if (RkTheme.current.name === "light")
         return (

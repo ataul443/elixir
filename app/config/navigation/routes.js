@@ -41,31 +41,17 @@ export const MainRoutes = [
 
 export const SideRoutes = [
   {
-    id: "Scanner",
-    title: "Scanner",
-    icon: <Ionicons name="md-qr-scanner" size={32} />,
-    screen: Screens.Scanner,
-    children: []
-  },
-  {
-    id: "CodeEditor",
-    title: "Code Dojo",
-    icon: <FontAwesome name="code" size={32} />,
-    screen: Screens.CodeEditor,
-    children: []
-  },
-  {
-    id: "QRScanner",
-    title: "QR Reader",
-    icon: <FontAwesome name="qrcode" size={32} />,
-    screen: Screens.QRScanner,
-    children: []
-  },
-  {
     id: "Profile",
     title: "Profile",
     icon: FontIcons.profile,
     screen: Screens.ProfileV1,
+    children: []
+  },
+  {
+    id: "Settings",
+    title: "Settings",
+    icon: FontIcons.dashboard,
+    screen: Screens.Settings,
     children: []
   }
 ];
@@ -78,11 +64,12 @@ menuRoutes.unshift({
   /*
   id: "QRScanner",
 title: "QR Reader",
+  ,
+
   id: "Scanner",
   title: "Scanner",
-*/
-
-  //screen: Screens.QRScanner,
+  screen: Screens.QRScanner,
+  */
 
   children: []
 });
@@ -96,7 +83,7 @@ menuRoutes.push({
 
 menuRoutes.push({
   id: "GridV1",
-  title: "Grid Menu",
+  title: "Dashboard",
   screen: Screens.GridV1,
   children: []
 });

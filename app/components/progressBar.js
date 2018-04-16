@@ -40,12 +40,14 @@ export class ProgressBar extends React.Component {
         <Animated.View style={[styles.value, {width: width}, {backgroundColor: this.props.color}]}/>
       </View>
     )
+    //#1C81D7
   }
 }
 
 let styles = StyleSheet.create({
   container: {
-    height: 3
+    height: 3,
+    
   },
   value: {
     height: 3

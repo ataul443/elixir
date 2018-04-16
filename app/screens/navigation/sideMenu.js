@@ -13,6 +13,7 @@ import { RkStyleSheet, RkText, RkTheme } from "react-native-ui-kitten";
 import { SideRoutes } from "../../config/navigation/routes";
 import { FontAwesome } from "../../assets/icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Foundation from "@expo/vector-icons/Foundation";
 
 export class SideMenu extends React.Component {
   constructor(props) {
@@ -143,6 +144,28 @@ export class SideMenu extends React.Component {
                   <MaterialCommunityIcons name="logout" size={32} />
                 </RkText>
                 <RkText>{"Logout"}</RkText>
+              </View>
+              <RkText rkType="awesome secondaryColor small">
+                {FontAwesome.chevronRight}
+              </RkText>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            style={styles.container}
+            key={"Logout"}
+            underlayColor={RkTheme.current.colors.button.underlay}
+            activeOpacity={1}
+            onPress={() => {
+              alert("Share");
+            }}
+          >
+            <View style={styles.content}>
+              <View style={styles.content}>
+                <RkText style={styles.icon} rkType="moon primary xlarge">
+                  <Foundation name="share" size={32} />
+                </RkText>
+                <RkText>{"Share & Rate"}</RkText>
               </View>
               <RkText rkType="awesome secondaryColor small">
                 {FontAwesome.chevronRight}
